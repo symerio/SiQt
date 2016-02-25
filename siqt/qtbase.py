@@ -17,16 +17,18 @@ def _normalise_name(name):
     else:
         raise ValueError('Backend {} is not supported!'.format(name))
 
-SIQT_BACKEND = 'PyQT4'
+SIQT_BACKEND = 'PyQt4'
 
 if 'SIQT_BACKEND' in os.environ:
     SIQT_BACKEND = os.environ['SIQT_BACKEND']
     SIQT_BACKEND = _normalise_name(SIQT_BACKEND)
 
-if SIQT_BACKEND == 'PyQT4':
+if SIQT_BACKEND == 'PyQt4':
     import PyQt4 as PyQt
     from PyQt4 import QtCore
     from PyQt4 import QtGui
+    QtPrintSupport = QtGui
+    QtWidgets = QtGui
 
 else:
     raise NotImplementedError('Backend {} is not supported!'.format(SIQT_BACKEND))
