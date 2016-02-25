@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from .constants import *
-
-from . import io
-from . import ai
-from . import filters
+from . import dep_resolv
+from . import definitions
+from .qtbase import *
 
 from ._version import __version__
 

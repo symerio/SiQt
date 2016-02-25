@@ -6,8 +6,8 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-from PyQt4 import QtCore
-from PyQt4 import QtGui
+from .qtbase import QtCore
+from .qtbase import QtGui
 
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT
 from .dep_resolv import dependency_graph, calculate_dependencies
