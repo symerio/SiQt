@@ -1,7 +1,6 @@
 # SiQt
 
-
-
+A convinience wrapper around PyQt for GUI developpement
 
 ## Installation notes
 

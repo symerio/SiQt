@@ -21,7 +21,7 @@ else:
 
 setup(name='taspectreg',
       version=version,
-      description='',
+      description='A convinience wrapper around PyQt for GUI developpement',
       author='Roman Yurchak',
       packages=find_packages(),
       include_package_data=True,
