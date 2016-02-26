@@ -5,7 +5,11 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+from collections import OrderedDict
+
 import six
+import numpy as np
+
 
 from .qtbase import QtCore
 from .qtbase import QtGui
@@ -46,6 +50,7 @@ def create_action(self, text, slot=None, shortcut=None,
         action.setCheckable(True)
     return action
 
+
 def menu_generator(self, name, label, elements):
     # File menu
     self.menu[name] = self.menuBar().addMenu("&"+label)
@@ -66,14 +71,11 @@ def menu_generator(self, name, label, elements):
     for key, menu_el  in elements.items():
         if menu_el is None:
             self.menu[name].addSeparator()
-            print('Ignoring')
             continue
 
 
         pars = self.menu[name].elmts[key]
-        print(pars)
 
-        
         if name == 'view':
             pars['slot'] = self.on_view_handler(key)
             if idx < 10:
@@ -119,6 +121,17 @@ class SiqtElement(dict):
         if isinstance(qtobj, six.string_types):
             qtobj = QtWidgets.QLabel(qtobj)  # if given a string, this is probably a label
         self.dtype = dtype
+        if isinstance(qtobj, QtWidgets.QLineEdit) and dtype != str:
+            if dtype in [float, np.float]:
+                validator = QtGui.QDoubleValidator()
+                qtobj.setValidator(validator)
+            elif dtype in [int, np.int]:
+                pass
+        if isinstance(qtobj, QtWidgets.QComboBox) and 'choices' in args:
+            args['choices'] = OrderedDict(args['choices'])
+            for key, val in args['choices'].items(): 
+                qtobj.addItem(QString(key), val)
+
         super(SiqtElement, self).__init__(qtobj=qtobj, depends=depends, **args)
         if layout is not None and position is not None:
             layout.addWidget(qtobj, *position)
@@ -127,17 +140,33 @@ class SiqtElement(dict):
         value = QString(str(value))
         self['qtobj'].setText(value)
 
+    def set_choices(self, choices):
+        control  = self['qtobj']
+        if not isinstance(control, QtWidgets.QComboBox):
+            raise NotImplementedError('set_choices is only valid for a QComboBox element')
+        choices = OrderedDict(choices)
+        control.blockSignals(True)
+        for idx in range(control.count()):
+            control.removeItem(0)
+
+        for key, val in choices.items():
+            control.addItem(key, val)
+        self['choices'] = choices
+        control.blockSignals(False)
+
+
     @property
     def value(self):
-        if isinstance(self['qtobj'], QtWidgets.QCheckBox):
-            return self['qtobj'].isChecked()
-        elif isinstance(self['qtobj'], QtWidgets.QComboBox):
-            key = str(self['qtobj'].currentText())
+        qtobj = self['qtobj']
+        if isinstance(qtobj, QtWidgets.QCheckBox):
+            return qtobj.isChecked()
+        elif isinstance(qtobj, QtWidgets.QComboBox):
+            key = str(qtobj.currentText())
             return self['choices'][key]
-        elif isinstance(self['qtobj'], QtWidgets.QSlider):
-            return self.dtype(self['qtobj'].value())
+        elif isinstance(qtobj, QtWidgets.QSlider):
+            return self.dtype(qtobj.value())
         else:
-            val = str(self['qtobj'].text())
+            val = str(qtobj.text())
             if not val and self.dtype != str:
                 val = 0
             return self.dtype(val)

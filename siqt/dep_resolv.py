@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-from .qtbase import QtGui
+from .qtbase import QtWidgets
 
 import numpy as np
 
@@ -33,7 +33,7 @@ def sync_gui(lock=[], update=[], view_mode=None, background=False):
             for key in update:
                 self.set_dep_flag_recursive(key, True)
 
-            QtGui.QApplication.processEvents()
+            QtWidgets.QApplication.processEvents()
 
             f(self, *args, **kwargs)
 

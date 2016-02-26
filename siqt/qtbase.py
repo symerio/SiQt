@@ -9,6 +9,7 @@ import os
 
 valid_backends = ['PyQt4', 'PyQt5', 'PySide']
 
+# need to implement https://www.python.org/dev/peps/pep-0302/
 
 def _normalise_name(name):
     for backend in valid_backends:
