@@ -6,10 +6,11 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import six
+
 from .qtbase import QtCore
 from .qtbase import QtGui
 
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT
 from .dep_resolv import dependency_graph, calculate_dependencies
 
 try:
@@ -18,10 +19,6 @@ except ImportError:
     QString = str
 
 
-class NavigationToolbar(NavigationToolbar2QT):
-    # only display the buttons we need
-    toolitems = [t for t in NavigationToolbar2QT.toolitems if
-                 t[0] in ('Home', 'Pan', 'Zoom', 'Save')]
 
 # The following functions are helper functions to setup the GUI
 def add_actions(self, target, actions):
@@ -111,14 +108,19 @@ def set_dep_flag_recursive(self, key, value, sync=False):
         calculate_dependencies(self)
 
 
-class GprGuiElement(dict):
+class SiqtElement(dict):
 
-    def __init__(self, qtobj, depends=[], dtype=str, **args):
+    def __init__(self, qtobj, layout=None, position=None, depends=[], dtype=str, **args):
         """
         A helper class to work with the underlying QtObject
         """
+        if isinstance(qtobj, six.string_types):
+            print(qtobj)
+            qtobj = QtGui.QLabel(qtobj)  # if given a string, this is probably a label
         self.dtype = dtype
-        super(GprGuiElement, self).__init__(qtobj=qtobj, depends=depends, **args)
+        super(SiqtElement, self).__init__(qtobj=qtobj, depends=depends, **args)
+        if layout is not None and position is not None:
+            layout.addWidget(qtobj, *position)
 
     def set_text(self, value):
         value = QString(str(value))
@@ -138,5 +140,15 @@ class GprGuiElement(dict):
             if not val and self.dtype != str:
                 val = 0
             return self.dtype(val)
+
+    def __getattr__(self, name):
+        """ Only called if name not in the registered methods
+        In this case call the qtobject methods """
+
+        return getattr(self['qtobj'],  name)
+
+
+
+
 
 

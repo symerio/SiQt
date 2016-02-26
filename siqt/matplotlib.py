@@ -13,3 +13,9 @@ if SIQT_BACKEND == 'PyQt4':
 else:
     raise NotImplementedError
 
+from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT
+
+class NavigationToolbar(NavigationToolbar2QT):
+    # only display the buttons we need
+    toolitems = [t for t in NavigationToolbar2QT.toolitems if
+                 t[0] in ('Home', 'Pan', 'Zoom', 'Save')]
