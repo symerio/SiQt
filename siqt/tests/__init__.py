@@ -7,8 +7,8 @@ from .run_suite import run, run_cli
 
 def get_system_info(pretty_print=False):
     import matplotlib as mpl
-    from PyQt4.QtCore import QT_VERSION_STR
-    from PyQt4.Qt import PYQT_VERSION_STR
+    from siqt import QtCore
+    from siqt import Qt
     import platform
     import pandas as pd
     import numpy as np
@@ -41,8 +41,8 @@ def get_system_info(pretty_print=False):
 
     sv['pandas'] = pd.__version__
     sv['matplotlib'] = mpl.__version__
-    sv['Qt'] = QT_VERSION_STR
-    sv['PyQt'] = PYQT_VERSION_STR
+    sv['Qt'] = QtCore.QT_VERSION_STR
+    sv['PyQt'] = Qt.PYQT_VERSION_STR
 
     if not pretty_print:
         return {'system': system, 'python': python, 'software_versions': sv}

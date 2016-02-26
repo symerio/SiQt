@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 from __future__ import absolute_import
@@ -10,11 +9,12 @@ import six
 
 from .qtbase import QtCore
 from .qtbase import QtGui
+from .qtbase import QtWidgets
 
 from .dep_resolv import dependency_graph, calculate_dependencies
 
 try:
-    from PyQt4.QtCore import QString
+    from .qtbase.QtCore import QString
 except ImportError:
     QString = str
 
@@ -31,17 +31,17 @@ def add_actions(self, target, actions):
 
 def create_action(self, text, slot=None, shortcut=None, 
                     icon=None, tip=None, checkable=False, 
-                    signal="triggered()"):
-    action = QtGui.QAction(text, self)
+                    signal="triggered"):
+    action = QtWidgets.QAction(text, self)
     if icon is not None:
-        action.setIcon(QtGui.QIcon(":/%s.png" % icon))
+        action.setIcon(QtWidgets.QIcon(":/%s.png" % icon))
     if shortcut is not None:
         action.setShortcut(shortcut)
     if tip is not None:
         action.setToolTip(tip)
         action.setStatusTip(tip)
     if slot is not None:
-        self.connect(action, QtCore.SIGNAL(signal), slot)
+        getattr(action, signal).connect(slot)
     if checkable:
         action.setCheckable(True)
     return action
@@ -115,8 +115,7 @@ class SiqtElement(dict):
         A helper class to work with the underlying QtObject
         """
         if isinstance(qtobj, six.string_types):
-            print(qtobj)
-            qtobj = QtGui.QLabel(qtobj)  # if given a string, this is probably a label
+            qtobj = QtWidgets.QLabel(qtobj)  # if given a string, this is probably a label
         self.dtype = dtype
         super(SiqtElement, self).__init__(qtobj=qtobj, depends=depends, **args)
         if layout is not None and position is not None:
@@ -128,12 +127,12 @@ class SiqtElement(dict):
 
     @property
     def value(self):
-        if isinstance(self['qtobj'], QtGui.QCheckBox):
+        if isinstance(self['qtobj'], QtWidgets.QCheckBox):
             return self['qtobj'].isChecked()
-        elif isinstance(self['qtobj'], QtGui.QComboBox):
+        elif isinstance(self['qtobj'], QtWidgets.QComboBox):
             key = str(self['qtobj'].currentText())
             return self['choices'][key]
-        elif isinstance(self['qtobj'], QtGui.QSlider):
+        elif isinstance(self['qtobj'], QtWidgets.QSlider):
             return self.dtype(self['qtobj'].value())
         else:
             val = str(self['qtobj'].text())

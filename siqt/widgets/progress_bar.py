@@ -7,13 +7,14 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 
-from PyQt4 import QtCore
-from PyQt4 import QtGui
+from ..qtbase import QtCore
+from ..qtbase import QtGui
+from ..qtbase import QtWidgets
 
 
 from ..dep_resolv import calculate_dependencies
 
-class ProgressBarWidget(QtGui.QWidget):
+class ProgressBarWidget(QtWidgets.QWidget):
 
     def __init__(self, main_window, parent = None):
         super(ProgressBarWidget, self).__init__(parent)

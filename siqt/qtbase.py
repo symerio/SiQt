@@ -27,9 +27,16 @@ if SIQT_BACKEND == 'PyQt4':
     import PyQt4 as PyQt
     from PyQt4 import QtCore
     from PyQt4 import QtGui
+    from PyQt4 import Qt
     QtPrintSupport = QtGui
     QtWidgets = QtGui
-
+elif SIQT_BACKEND == 'PyQt5':
+    import PyQt5 as PyQt
+    from PyQt5 import Qt
+    from PyQt5 import QtCore
+    from PyQt5 import QtGui
+    from PyQt5 import QtPrintSupport
+    from PyQt5 import QtWidgets
 else:
     raise NotImplementedError('Backend {} is not supported!'.format(SIQT_BACKEND))
 

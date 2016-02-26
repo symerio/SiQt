@@ -7,15 +7,19 @@ from __future__ import unicode_literals
 
 from .qtbase import SIQT_BACKEND
 
-
+import matplotlib
 if SIQT_BACKEND == 'PyQt4':
     PyQtAgg_str = 'Qt4Agg'
+    matplotlib.use(PyQtAgg_str)
+    import matplotlib.backends.backend_qt4agg as backend_qtagg
+elif SIQT_BACKEND == 'PyQt5':
+    PyQtAgg_str = 'Qt5Agg'
+    matplotlib.use(PyQtAgg_str)
+    import matplotlib.backends.backend_qt5agg as backend_qtagg
 else:
     raise NotImplementedError
 
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT
-
-class NavigationToolbar(NavigationToolbar2QT):
+class NavigationToolbar(backend_qtagg.NavigationToolbar2QT):
     # only display the buttons we need
-    toolitems = [t for t in NavigationToolbar2QT.toolitems if
+    toolitems = [t for t in backend_qtagg.NavigationToolbar2QT.toolitems if
                  t[0] in ('Home', 'Pan', 'Zoom', 'Save')]
