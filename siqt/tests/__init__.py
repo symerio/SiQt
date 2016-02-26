@@ -7,8 +7,8 @@ from .run_suite import run, run_cli
 
 def get_system_info(pretty_print=False):
     import matplotlib as mpl
+    import siqt
     from siqt import QtCore
-    from siqt import Qt
     import platform
     import pandas as pd
     import numpy as np
@@ -41,8 +41,18 @@ def get_system_info(pretty_print=False):
 
     sv['pandas'] = pd.__version__
     sv['matplotlib'] = mpl.__version__
-    sv['Qt'] = QtCore.QT_VERSION_STR
-    sv['PyQt'] = Qt.PYQT_VERSION_STR
+    if 'PyQt' in siqt.SIQT_BACKEND:
+        from siqt import Qt
+        sv['Qt'] = QtCore.QT_VERSION_STR
+        sv['PyQt'] = Qt.PYQT_VERSION_STR
+    elif 'PySide' in siqt.SIQT_BACKEND:
+        import PySide
+        sv['Qt'] = QtCore.__version__
+        sv['PySide'] = PySide.__version__
+    else:
+        raise NotImplementedError
+
+
 
     if not pretty_print:
         return {'system': system, 'python': python, 'software_versions': sv}
