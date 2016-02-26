@@ -66,6 +66,8 @@ def calculate_dependencies(self, verbose=False, initialize=False):
 
     for menu_el in self.menu.values():
         for key, el in  menu_el.elmts.items():
+            if el is None:
+                continue
             if 'enabled' in el and not el['enabled']:
                 continue
             dep_list.append(('menu', key, el))

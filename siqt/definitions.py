@@ -46,7 +46,7 @@ def create_action(self, text, slot=None, shortcut=None,
         action.setCheckable(True)
     return action
 
-def menu_generator(self, name, label, elements, element_order):
+def menu_generator(self, name, label, elements):
     # File menu
     self.menu[name] = self.menuBar().addMenu("&"+label)
     self.menu[name].elmts = elements
@@ -63,13 +63,15 @@ def menu_generator(self, name, label, elements, element_order):
         return f
 
     idx = 1
-    for key in element_order:
-        if key is None:
+    for key, menu_el  in elements.items():
+        if menu_el is None:
             self.menu[name].addSeparator()
+            print('Ignoring')
             continue
 
 
         pars = self.menu[name].elmts[key]
+        print(pars)
 
         
         if name == 'view':
