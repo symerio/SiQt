@@ -125,8 +125,11 @@ class SiqtElement(dict):
             if dtype in [float, np.float]:
                 validator = QtGui.QDoubleValidator()
                 qtobj.setValidator(validator)
+                args['validator'] = validator
             elif dtype in [int, np.int]:
-                pass
+                validator = QtGui.QIntValidator()
+                qtobj.setValidator(validator)
+                args['validator'] = validator
         if isinstance(qtobj, QtWidgets.QComboBox) and 'choices' in args:
             args['choices'] = OrderedDict(args['choices'])
             for key, val in args['choices'].items(): 
@@ -142,15 +145,22 @@ class SiqtElement(dict):
 
     def set_choices(self, choices):
         control  = self['qtobj']
-        if not isinstance(control, QtWidgets.QComboBox):
+        if not isinstance(control, (QtWidgets.QComboBox, QtWidgets.QListWidget)):
             raise NotImplementedError('set_choices is only valid for a QComboBox element')
-        choices = OrderedDict(choices)
-        control.blockSignals(True)
-        for idx in range(control.count()):
-            control.removeItem(0)
 
-        for key, val in choices.items():
-            control.addItem(key, val)
+        control.blockSignals(True)
+        if isinstance(control, QtWidgets.QComboBox):
+            choices = OrderedDict(choices)
+            for idx in range(control.count()):
+                control.removeItem(0)
+
+            for key, val in choices.items():
+                control.addItem(key, val)
+        elif isinstance(control, QtWidgets.QListWidget):
+            control.clear()
+            for key in sorted(choices):
+                control.addItem(key)
+
         self['choices'] = choices
         control.blockSignals(False)
 
@@ -165,6 +175,8 @@ class SiqtElement(dict):
             return self['choices'][key]
         elif isinstance(qtobj, QtWidgets.QSlider):
             return self.dtype(qtobj.value())
+        elif isinstance(qtobj, QtWidgets.QListWidget):
+            return [str(el.text()) for el in qtobj.selectedItems()]
         else:
             val = str(qtobj.text())
             if not val and self.dtype != str:
