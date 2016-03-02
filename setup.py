@@ -19,7 +19,7 @@ else:
     raise RuntimeError("Unable to find version string in %s." % (VERSIONFILE,))
 
 
-setup(name='taspectreg',
+setup(name='siqt',
       version=version,
       description='A convinience wrapper around PyQt for GUI developpement',
       author='Roman Yurchak',
