@@ -164,6 +164,22 @@ class SiqtElement(dict):
         self['choices'] = choices
         control.blockSignals(False)
 
+    def set_value(self, value):
+        qtobj = self['qtobj']
+        if isinstance(qtobj, QtWidgets.QCheckBox):
+            if value:
+                value =  QtCore.Qt.Checked
+            else:
+                value = QtCore.Qt.Unchecked
+            qtobj.setCheckState(value)
+        elif isinstance(qtobj, (QtWidgets.QComboBox, QtWidgets.QListWidget)):
+            self.set_choices(value)
+        elif isinstance(qtobj, QtWidgets.QSlider):
+            raise NotImplementedError
+        else:
+            qtobj.setText(str(value))
+
+
 
     @property
     def value(self):
