@@ -5,6 +5,7 @@ from __future__ import print_function
 
 from .qtbase import QtWidgets
 
+import six
 import numpy as np
 
 
@@ -13,6 +14,7 @@ def show_qt_control_element(el):
         #el.setDisabled(not status)
         el.setEnabled(status)
     return f
+
 
 def sync_gui(lock=[], update=[], view_mode=None, background=False):
     def decorator_generator(f):
@@ -55,6 +57,31 @@ def dependency_graph(key, storage):
             if new_fields:
                 out += new_fields
     return out
+
+
+def check_depflags(dep_flags, expr):
+    """ Check if the boolean expression expr is verified in dep_flags
+    Two possibilities for expr:
+      ['flag1', 'flag2', etc]
+    a boolean expression
+      'flag1 and (flag2 or not flag3)'
+
+    """
+    if isinstance(expr, (list, tuple)):
+        res = [dep_flags[dkey] for dkey in expr]
+        if not len(res):
+            return True
+        else:
+            return np.array(res).all()
+    elif isinstance(expr, six.string_types):
+        from .logic_parser import LogicParser
+        lp = LogicParser(dep_flags)
+        return lp(expr)
+
+    else:
+        raise NotImplementedError
+
+
 
 
 def calculate_dependencies(self, verbose=False, initialize=False):

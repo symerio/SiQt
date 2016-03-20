@@ -1,0 +1,27 @@
+# -*- coding: utf-8 -*-
+
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
+
+from siqt.dep_resolv import check_depflags
+from numpy.testing import assert_equal
+
+
+def test_check_depflags():
+    dep_flags = {'a': True, 'b': False, 'c': True, 'd': False}
+    yield assert_equal, check_depflags(dep_flags, ['a', 'c']), True
+    yield assert_equal, check_depflags(dep_flags, ['a', 'd']), False
+    yield assert_equal, check_depflags(dep_flags, ['a', 'b', 'd']), False
+    yield assert_equal, check_depflags(dep_flags, 'a'), True
+    yield assert_equal, check_depflags(dep_flags, 'a and c'), True
+    yield assert_equal, check_depflags(dep_flags, 'a and d'), False
+    yield assert_equal, check_depflags(dep_flags, 'a or d'), True
+    yield assert_equal, check_depflags(dep_flags, 'c and (a or d)'), True
+
+
+
+
+
+
