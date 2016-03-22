@@ -61,7 +61,11 @@ def generic_eval(tokens, op_dict):
     elif len(tokens) == 2:
         return op_dict[tokens[0]](tokens[1]) # unary_eval
     elif len(tokens) == 3:
-        return op_dict[tokens[1]](tokens[0], tokens[2]) # binary_eval
+        try:
+            return op_dict[tokens[1]](tokens[0], tokens[2]) # binary_eval
+        except:
+            print(tokens)
+            raise
     elif len(tokens) > 3:
         if len(tokens) % 2 != (1 + tokens.count('not')) % 2:
             raise ValueError('Parsing failed, wrong lenght {} for {} with {} "not"'.format(
@@ -93,8 +97,7 @@ def formatted_bool_eval(token_lst, op_dict):
     if not has_parens:
         return generic_eval(token_lst, op_dict)
 
-    mask = slice(l_paren, r_paren + 1)
-    token_lst[mask] = [generic_eval(token_lst[mask], op_dict)]
+    token_lst[l_paren:r_paren+1] = [generic_eval(token_lst[l_paren+1:r_paren], op_dict)]
 
     return formatted_bool_eval(token_lst, op_dict)
 

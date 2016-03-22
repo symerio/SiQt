@@ -20,7 +20,6 @@ def test_check_depflags():
     yield assert_equal, check_depflags(dep_flags, 'a and c and d'), False
     yield assert_equal, check_depflags(dep_flags, 'a or d'), True
     yield assert_equal, check_depflags(dep_flags, 'c and (a or d)'), True
-    yield assert_equal, check_depflags(dep_flags, 'c and (a or d)'), True
     yield assert_equal, check_depflags(dep_flags, 'c and not d'), True
     yield assert_equal, check_depflags(dep_flags, '(c or d) and (not d or b)'), True
 

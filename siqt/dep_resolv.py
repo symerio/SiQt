@@ -117,8 +117,10 @@ def calculate_dependencies(self, verbose=False, initialize=False):
 
     for mtype, key, el in dep_list:
         # check if the dependency for this control element is verified
-        res = [self.dep_flags[dkey] for dkey in el['depends']]
-        if not len(res):
+        res = check_depflags(self.dep_flags, el['depends'])
+        if isinstance(res, (bool, np.bool_)):
+            pass
+        elif not len(res):
             res = True
         else:
             res = np.array(res).all()
