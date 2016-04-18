@@ -6,7 +6,9 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 from siqt.dep_resolv import check_depflags
-from numpy.testing import assert_equal
+
+def assert_equal(a, b):
+    assert a==b
 
 
 def test_check_depflags():

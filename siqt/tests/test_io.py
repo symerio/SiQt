@@ -6,6 +6,3 @@ from __future__ import print_function
 #from __future__ import unicode_literals
 import os.path
 
-import numpy as np
-from numpy.testing import assert_allclose, assert_equal
-

@@ -18,4 +18,4 @@ A convinience wrapper around PyQt for GUI developpement
 
  The unit tests suite can be run with
  
-    import siqt.tests; siqt.tests.run()
+    python -c "import siqt.tests; siqt.tests.run()"
