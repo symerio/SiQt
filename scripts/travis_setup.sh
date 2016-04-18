@@ -13,6 +13,6 @@ elif  [[ $SIQT_BACKEND == 'PySide' ]]; then
     if [[ ${TRAVIS_PYTHON_VERSION:0:1} == 2 ]]; then
         conda install --yes "pyside"
     else
-        conda install --yes -c pyzo pyzo-pyside
+        conda install --yes -c pyzo pyside-pyzo
     fi
 fi
