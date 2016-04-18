@@ -3,13 +3,17 @@ sudo: false
 matrix:
     include:
     - python: "3.5"
-      env: DEPS="PyQt=4.11 six nose"
+      env: DEPS="six nose"
+      env: SIQT_BACKEND="PyQt4"
     - python: "3.4"
-      env: DEPS="PyQt=4.11 six nose"
+      env: DEPS="six nose"
+      env: SIQT_BACKEND="PyQt4"
     - python: "3.3"
-      env: DEPS="PyQt=4.11 six nose"
+      env: DEPS="six nose"
+      env: SIQT_BACKEND="PyQt4"
     - python: "2.7"
-      env: DEPS="PyQt=4.11 six nose"
+      env: DEPS="six nose"
+      env: SIQT_BACKEND="PyQt4"
 
 install: 
     - wget http://repo.continuum.io/miniconda/Miniconda${TRAVIS_PYTHON_VERSION:0:1}-latest-Linux-x86_64.sh -O miniconda.sh
@@ -23,6 +27,7 @@ install:
     - conda update --yes conda
     - conda install --yes -c conda conda-env
     - conda install --yes $DEPS pip python=${TRAVIS_PYTHON_VERSION}
+    - if [[ $SIQT_BACKEND == 'PyQt4' ]]; then conda install --yes "PyQT=4.11" ; fi
     - pip install coveralls
     - python setup.py install
     - cd ~/

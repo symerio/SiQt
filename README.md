@@ -5,6 +5,7 @@
 
 A convinience wrapper around PyQt for GUI developpement
 
+
 ## Installation notes
 
  This package requires Python 2.7 or 3.2-3.5 with one of the following modules installed: `PyQt4`.
