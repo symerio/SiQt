@@ -9,6 +9,8 @@ matrix:
     - python: "3.4"
       env: SIQT_BACKEND="PySide" DEPS="six nose" 
     - python: "2.7"
+      env: SIQT_BACKEND="PyQt5" DEPS="six nose" 
+    - python: "2.7"
       env: SIQT_BACKEND="PyQt4" DEPS="six nose" 
     - python: "2.7"
       env: SIQT_BACKEND="PySide" DEPS="six nose" 
