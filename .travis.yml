@@ -25,7 +25,7 @@ install:
     - conda update --yes conda
     - conda install --yes -c conda conda-env
     - conda install --yes $DEPS pip python=${TRAVIS_PYTHON_VERSION}
-    - bash ./scripts/tavis_setup.sh
+    - bash ./scripts/travis_setup.sh
     - pip install coveralls
     - python setup.py install
     - cd ~/
