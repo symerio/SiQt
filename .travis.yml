@@ -3,17 +3,13 @@ sudo: false
 matrix:
     include:
     - python: "3.5"
-      env: DEPS="six nose"
-      env: SIQT_BACKEND="PyQt4"
+      env: DEPS="six nose" SIQT_BACKEND="PyQt4"
     - python: "3.4"
-      env: DEPS="six nose"
-      env: SIQT_BACKEND="PyQt4"
+      env: DEPS="six nose" SIQT_BACKEND="PyQt4"
     - python: "3.3"
-      env: DEPS="six nose"
-      env: SIQT_BACKEND="PyQt4"
+      env: DEPS="six nose" SIQT_BACKEND="PyQt4"
     - python: "2.7"
-      env: DEPS="six nose"
-      env: SIQT_BACKEND="PyQt4"
+      env: DEPS="six nose" SIQT_BACKEND="PyQt4"
 
 install: 
     - wget http://repo.continuum.io/miniconda/Miniconda${TRAVIS_PYTHON_VERSION:0:1}-latest-Linux-x86_64.sh -O miniconda.sh
