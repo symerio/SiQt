@@ -4,20 +4,15 @@ A convinience wrapper around PyQt for GUI developpement
 
 ## Installation notes
 
- This package requires Python 2.7 or 3.2-3.5 with the following modules installed: `numpy>=1.9`, `scipy`, `pandas`, `matplotlib`, `scikit-learn`, `six`, `setuptools`, `nose`.
+ This package requires Python 2.7 or 3.2-3.5 with one of the following modules installed: `PyQt4`.
 
  To install this module run,
     
-    python setup.py install
+    pip install https://github.com/rth/siqt.git
 
 
 ## Unit tests
 
- The unit tests suite can be run from the command line,
-
-    $ cd siqt/tests/
-    $ nosetests -s .
-
-or from within Python with,
+ The unit tests suite can be run with
  
     import siqt.tests; siqt.tests.run()
