@@ -18,7 +18,19 @@ def _normalise_name(name):
     else:
         raise ValueError('Backend {} is not supported!'.format(name))
 
-SIQT_BACKEND = 'PyQt4'
+def _try_import(backend):
+    try:
+        __import__(backend)
+        return True
+    except ImportError:
+        return False
+
+for backend in valid_backends:
+    if _try_import(backend):
+        SIQT_BACKEND = backend
+        break
+else:
+    raise ValueError('None of the {} seems to be installed!'.format(valid_backends)) 
 
 if 'SIQT_BACKEND' in os.environ:
     SIQT_BACKEND = os.environ['SIQT_BACKEND']
