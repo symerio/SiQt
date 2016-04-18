@@ -1,5 +1,8 @@
 # SiQt
 
+[![Build Status](https://travis-ci.org/rth/siqt.svg?branch=master)](https://travis-ci.org/rth/siqt)
+
+
 A convinience wrapper around PyQt for GUI developpement
 
 ## Installation notes
