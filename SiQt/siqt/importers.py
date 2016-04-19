@@ -48,10 +48,10 @@ def use(backend_name, force=False, mode='smooth', matplotlib_hook=False):
             print('Warning: SiQt.use should be called before any imports of PyQt/PySide.\n'\
               '         Changing backend on the runtime (i.e. calling it a second time) is not supported!')
         return
-    this.backend = name
     pkg = pkgutil.find_loader(name)
     if pkg is None:
         raise ImportError('Backend {} does not seem to be installed and cannot be used!')
+    this.backend = name
     if six.PY3:
         path_new = os.path.dirname(pkg.path)
     else:
