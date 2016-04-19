@@ -59,6 +59,9 @@ def use(backend_name, force=False, mode='smooth', matplotlib_hook=False):
     this.__path__.append(path_new)
 
     sys.meta_path.insert(0, RenameImportFinder())
+    if six.PY2:
+        if this.backend in ['PyQt4', 'PyQt5']:
+            import sip # just initializing
     if matplotlib_hook:
         sys.meta_path.insert(0, MatplotlibImporter())
 
@@ -127,11 +130,15 @@ class RenameImportLoader(object):
         for backend_name in valid_backends:
             if backend_name in name:
                 name = name.replace(backend_name, 'SiQt')
+                self.name_new = name
                 break
         print('2. Loading', name)
         if name in sys.modules:
             print('zzzz', name)
+            print(sys.modules.keys())
             module = sys.modules[name]
+            if self.name_orig not in sys.modules:
+                sys.modules[self.name_orig] = module
         else:
             print('aaa')
             module = self._find_and_load_module(name, path)
@@ -164,14 +171,39 @@ class RenameImportLoader(object):
                     return sys.modules[name]
                 #flog.debug('What to do here?')
 
+        #if six.PY2:
         name = bits[0]
         if name in sys.modules:
-            print('zzzz', name)
-            return sys.modules[name]
+            print('zzzz', name, six.PY2)
+            #print(sys.modules.keys())
+            #sys.modules[self.name_orig] = name
+            module = sys.modules[name]
+            #print(module.__spec__)
         else:
             print('4.', name, path)
-            module_info = imp.find_module(name, path)
-        return imp.load_module(name, *module_info)
+            fp, pathname, description = imp.find_module(name, path)
+            print(name, self.name_new,  fp, pathname, description)
+            try:
+                print(self.name_orig)
+                print(description[-1])
+                if description[-1] == 3: # dynamic library
+                    try:
+                        module = imp.load_dynamic(self.name_orig, pathname)
+                    except:
+                        print('Trying again')
+                        module = imp.load_dynamic(self.name_orig, pathname)
+                else:
+                    module = imp.load_module(self.name_orig, fp, pathname, description)
+            finally:
+                if fp:
+                    fp.close()
+        return module
+        #else: # PY3
+        #    import importlib.machinery
+        #    print('Machinery')
+        #    module = importlib.machinery.SourceFileLoader(name, path).load_module()
+        #    return module
+
 
 
 import sys
