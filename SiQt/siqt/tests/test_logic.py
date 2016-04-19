@@ -5,7 +5,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-from siqt.dep_resolv import check_depflags
+from SiQt.siqt.dep_resolv import check_depflags
 
 def assert_equal(a, b):
     assert a==b

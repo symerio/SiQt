@@ -35,7 +35,7 @@ install:
     - pwd
 
 script: 
-    - python  -c "import siqt.tests; siqt.tests.run_cli(coverage=True)"
+    - python  -c "from SiQt.siqt import tests; tests.run_cli(coverage=True)"
 
 #after_success:
 #    coveralls

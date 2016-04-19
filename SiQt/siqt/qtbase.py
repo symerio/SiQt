@@ -11,12 +11,6 @@ valid_backends = ['PyQt4', 'PyQt5', 'PySide']
 
 # need to implement https://www.python.org/dev/peps/pep-0302/
 
-def _normalise_name(name):
-    for backend in valid_backends:
-        if name.lower() == backend.lower():
-            return backend
-    else:
-        raise ValueError('Backend {} is not supported!'.format(name))
 
 def _try_import(backend):
     try:
