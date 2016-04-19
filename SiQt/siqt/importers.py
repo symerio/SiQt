@@ -41,6 +41,7 @@ def use(backend_name, force=False, mode='smooth', matplotlib_hook=False):
     """
     import sys
     from .. import this
+    #from future.standard_library import RenameImport
     name = _normalise_name(backend_name)
     if this.backend is not None:
         if this.backend != name:
@@ -54,7 +55,8 @@ def use(backend_name, force=False, mode='smooth', matplotlib_hook=False):
     else:
         path_new = os.path.dirname(pkg.filename)
     this.__path__.append(path_new)
-    sys.meta_path.insert(0, HijackPyQtImport())
+
+    sys.meta_path.insert(0, RenameImportFinder())
     if matplotlib_hook:
         sys.meta_path.insert(0, MatplotlibImporter())
 
@@ -75,11 +77,106 @@ class MatplotlibImporter(object):
         """This is never going to be called"""
         pass
 
-def _uncheck_name(func):
-    def wrapper(name):
-        print(name)
-        return func('SiQt')
-    return wrapper
+class RenameImportFinder(object):
+    """
+    A class for import hooks mapping Py3 module names etc. to the Py2 equivalents.
+    Adapted from http://python-future.org/_modules/future/standard_library.html
+    """
+    # Different RenameImport classes are created when importing this module from
+    # different source files. This causes isinstance(hook, RenameImport) checks
+    # to produce inconsistent results. We add this RENAMER attribute here so
+    # remove_hooks() and install_hooks() can find instances of these classes
+    # easily:
+    def __init__(self):
+        pass
+
+    def find_module(self, fullname, path=None):
+        # Handles hierarchical importing: package.module.module2
+        for name in valid_backends:
+            if fullname.startswith(name):
+                print('Finding', fullname, path)
+                return RenameImportLoader(fullname, path)
+        return None
+
+class RenameImportLoader(object):
+    """
+    A class for import hooks mapping Py3 module names etc. to the Py2 equivalents.
+    Adapted from http://python-future.org/_modules/future/standard_library.html
+    """
+    # Different RenameImport classes are created when importing this module from
+    # different source files. This causes isinstance(hook, RenameImport) checks
+    # to produce inconsistent results. We add this RENAMER attribute here so
+    # remove_hooks() and install_hooks() can find instances of these classes
+    # easily:
+    RENAMER = True
+
+    def __init__(self, name, path=None):
+        '''
+        Pass in a dictionary-like object mapping from old names to new
+        names. E.g. {'ConfigParser': 'configparser', 'cPickle': 'pickle'}
+        '''
+        self.name_orig = name
+        self.path = self._normalize_path(path)
+
+    @staticmethod
+    def _normalize_path(path):
+        if path is not None and len(path) == 2:
+            path = [os.path.join(*path[::-1])] # not sure why this is not correct in Py2
+        return path
+
+    def load_module(self, name, path=None):
+        if path is None:
+            path = self.path
+        print('Loading', name, path)
+        for backend_name in valid_backends:
+            if backend_name in name:
+                name = name.replace(backend_name, 'SiQt')
+                break
+        print('2. Loading', name)
+        if name in sys.modules:
+            print('zzzz', name)
+            module = sys.modules[name]
+        else:
+            print('aaa')
+            module = self._find_and_load_module(name, path)
+            sys.modules[name] = module
+            sys.modules[self.name_orig] = module
+        #module.__spec__.name = self.name_orig
+        print(module.__spec__)
+        return module
+
+
+    def _find_and_load_module(self, name, path=None):
+        """
+        Finds and loads it. But if there's a . in the name, handles it
+        properly.
+        """
+        print('3.', name, path)
+        import imp
+        bits = name.split('.')
+        while len(bits) > 1:
+            # Treat the first bit as a package
+            packagename = bits.pop(0)
+            print(packagename)
+            package = self._find_and_load_module(packagename, path)
+            try:
+                path = package.__path__
+            except AttributeError:
+                # This could be e.g. moves.
+                #flog.debug('Package {0} has no __path__.'.format(package))
+                if name in sys.modules:
+                    return sys.modules[name]
+                #flog.debug('What to do here?')
+
+        name = bits[0]
+        if name in sys.modules:
+            print('zzzz', name)
+            return sys.modules[name]
+        else:
+            path = self._normalize_path(path)
+            print('4.', name, path)
+            module_info = imp.find_module(name, path)
+        return imp.load_module(name, *module_info)
 
 
 import sys
