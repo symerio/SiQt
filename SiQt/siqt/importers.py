@@ -98,7 +98,7 @@ def format_arg_value(arg_val):
     return "%s=%r" % (arg, val)
 
 
-def echo(fn, write=sys.stdout.write):
+def echo(fn):
     """ Echo calls to a function.
     
     Returns a decorated version of the input function which "echoes" calls
@@ -112,12 +112,24 @@ def echo(fn, write=sys.stdout.write):
         # Collect function arguments by chaining together positional,
         # defaulted, extra positional and keyword arguments.
         v = list(v)
-        if v[0] in valid_backends:
+        name = v[0]
+        if name in valid_backends:
             v[0] = 'SiQt'
-        write("%s,%s\n" % (v, type(v)))
-        return fn(*v)
-    return wrapped
+        elif name == 'SiQt':
+            pass
+        elif hasattr(name, '__spec__'):
+            print(dir(name))
+            spec = name.__spec__
+            spec.name = 'SiQt'
+            name.__name__ = 'SiQt'
+        else:
+            print(name)
 
+        print("%s %s" % (fn, v))
+        res = fn(*v)
+        print("Out: %s" % res)
+        return res
+    return wrapped
 
 
 class HijackPyQtImport(object):
@@ -130,19 +142,16 @@ class HijackPyQtImport(object):
                 fullname_out = fullname.replace(backend_name, 'SiQt')
                 print(backend_name, fullname,  path, fullname_out)
                 print(sys.meta_path)
-                for importer in sys.meta_path:
-                    if isinstance(importer, HijackPyQtImport):
-                        continue
-                    loader = importer.find_module(fullname_out, path)
-                    print('1. ', importer, loader, loader is None)
-                    if loader is not None:
-                        for method in dir(loader):
-                            if not method.startswith('__'):
-                                setattr(loader, method, echo(getattr(loader, method)))
-                            #print(el, getattr(loader, el))
-                        #loader.exec_module = _uncheck_name(loader.exec_module)
-                        return loader
+                if six.PY3:
+                    import importlib.machinery
+                    print(fullname_out, path)
+                    loader =  importlib.machinery.SourceFileLoader(fullname_out, path)
+                    for attr in dir(loader):
+                        if not attr.startswith('__'):
+                            setattr(loader, attr, echo(getattr(loader, attr)))
+                    return loader
+                    #return self._py3_loader(fullname_out, path)
                 else:
-                    raise ValueError('This should not be possible!')
+                    raise NotImplementedError
         else:
             return None
