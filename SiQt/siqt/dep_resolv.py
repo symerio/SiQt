@@ -3,7 +3,6 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-from .qtbase import QtWidgets
 
 import six
 
@@ -16,6 +15,7 @@ def show_qt_control_element(el):
 
 
 def sync_gui(lock=[], update=[], view_mode=None, background=False):
+    from .qtbase import QtWidgets
     def decorator_generator(f):
         def f_wrapper(self, *args, **kwargs):
             # lock some elements if need be

@@ -8,6 +8,6 @@ release_notes:
 	git log --pretty=format:" - [\`%h\`] *%ai*%n%n   - %s%n  %b" >> RELEASE.md
 
 test2: 
-	python2 /usr/bin/nosetests -s siqt --with-coverage --cover-package=siqt
+	python2 /usr/bin/nosetests -s SiQt --with-coverage --cover-package=SiQt
 test3: 
-	python3 /usr/bin/nosetests -s siqt --with-coverage --cover-package=siqt
+	python3 /usr/bin/nosetests -s SiQt --with-coverage --cover-package=SiQt
