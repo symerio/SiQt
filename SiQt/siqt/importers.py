@@ -43,19 +43,19 @@ def use(backend_name, force=False, mode='smooth', matplotlib_hook=False):
     from .. import this
     #from future.standard_library import RenameImport
     name = _normalise_name(backend_name)
+    pkg = pkgutil.find_loader(name)
+    if pkg is None:
+        raise ImportError('Backend {} does not seem to be installed and cannot be used!')
     if this.backend is not None:
         if this.backend != name:
             print('Warning: SiQt.use should be called before any imports of PyQt/PySide.\n'\
               '         Changing backend on the runtime (i.e. calling it a second time) is not supported!')
         return
-    pkg = pkgutil.find_loader(name)
-    if pkg is None:
-        raise ImportError('Backend {} does not seem to be installed and cannot be used!')
     this.backend = name
     if six.PY3:
         path_new = os.path.dirname(pkg.path)
     else:
-        path_new = os.path.dirname(pkg.filename)
+        path_new = pkg.filename
     this.__path__.append(path_new)
 
     sys.meta_path.insert(0, RenameImportFinder())
