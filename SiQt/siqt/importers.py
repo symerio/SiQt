@@ -50,6 +50,8 @@ def use(backend_name, force=False, mode='smooth', matplotlib_hook=False):
         return
     this.backend = name
     pkg = pkgutil.find_loader(name)
+    if pkg is None:
+        raise ImportError('Backend {} does not seem to be installed and cannot be used!')
     if six.PY3:
         path_new = os.path.dirname(pkg.path)
     else:
