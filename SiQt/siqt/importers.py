@@ -118,13 +118,7 @@ class RenameImportLoader(object):
         names. E.g. {'ConfigParser': 'configparser', 'cPickle': 'pickle'}
         '''
         self.name_orig = name
-        self.path = self._normalize_path(path)
-
-    @staticmethod
-    def _normalize_path(path):
-        if path is not None and len(path) == 2:
-            path = [os.path.join(*path[::-1])] # not sure why this is not correct in Py2
-        return path
+        self.path = path
 
     def load_module(self, name, path=None):
         if path is None:
@@ -144,7 +138,7 @@ class RenameImportLoader(object):
             sys.modules[name] = module
             sys.modules[self.name_orig] = module
         #module.__spec__.name = self.name_orig
-        print(module.__spec__)
+        #print(module.__spec__)
         return module
 
 
@@ -175,7 +169,6 @@ class RenameImportLoader(object):
             print('zzzz', name)
             return sys.modules[name]
         else:
-            path = self._normalize_path(path)
             print('4.', name, path)
             module_info = imp.find_module(name, path)
         return imp.load_module(name, *module_info)
