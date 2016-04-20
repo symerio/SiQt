@@ -6,12 +6,9 @@ import sys
 from .run_suite import run, run_cli
 
 def get_system_info(pretty_print=False):
-    import matplotlib as mpl
     import siqt
     from siqt import QtCore
     import platform
-    import pandas as pd
-    import numpy as np
     system = {}
     for key in ['architecture', 'machine', 'platform', 'processor',
                 'system']:
@@ -32,15 +29,28 @@ def get_system_info(pretty_print=False):
         python[key] = getattr(platform, key)()
 
     sv = {}
-    sv['numpy'] = np.__version__
+    try:
+        import numpy as np
+        sv['numpy'] = np.__version__
+    except ImportError:
+        sv['numpy'] = 'Not installed'
+
     try:
         import scipy
         sv['scipy'] = scipy.__version__
     except ImportError:
         sv['scipy'] = "Not installed"
 
-    sv['pandas'] = pd.__version__
-    sv['matplotlib'] = mpl.__version__
+    try:
+        import pandas as pd
+        sv['pandas'] = pd.__version__
+    except ImportError:
+        sv['pandas'] = "Not installed"
+    try:
+        import matplotlib as mpl
+        sv['matplotlib'] = mpl.__version__
+    except ImportError:
+        sv['matplotlib'] = "Not installed"
     if 'PyQt' in siqt.SIQT_BACKEND:
         from siqt import Qt
         sv['Qt'] = QtCore.QT_VERSION_STR

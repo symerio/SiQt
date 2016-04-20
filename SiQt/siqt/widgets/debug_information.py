@@ -8,7 +8,6 @@ from __future__ import unicode_literals
 
 from ..qtbase import QtCore
 from ..qtbase import QtWidgets
-import numpy as np
 
 from ..tests import get_system_info
 

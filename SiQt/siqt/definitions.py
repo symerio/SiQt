@@ -8,8 +8,6 @@ from __future__ import unicode_literals
 from collections import OrderedDict
 
 import six
-import numpy as np
-
 
 from .qtbase import QtCore
 from .qtbase import QtGui
@@ -122,11 +120,11 @@ class SiqtElement(dict):
             qtobj = QtWidgets.QLabel(qtobj)  # if given a string, this is probably a label
         self.dtype = dtype
         if isinstance(qtobj, QtWidgets.QLineEdit) and dtype != str:
-            if dtype in [float, np.float]:
+            if dtype in [float]: #, np.float]:
                 validator = QtGui.QDoubleValidator()
                 qtobj.setValidator(validator)
                 args['validator'] = validator
-            elif dtype in [int, np.int]:
+            elif dtype in [int]: #, np.int]:
                 validator = QtGui.QIntValidator()
                 qtobj.setValidator(validator)
                 args['validator'] = validator

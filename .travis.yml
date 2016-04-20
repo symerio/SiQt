@@ -3,13 +3,17 @@ sudo: false
 matrix:
     include:
     - python: "3.5"
-      env: DEPS="PyQt=4.11 six"
+      env: SIQT_BACKEND="PyQt5" DEPS="six nose" 
+    - python: "3.5"
+      env: SIQT_BACKEND="PyQt4" DEPS="six nose" 
     - python: "3.4"
-      env: DEPS="PyQt=4.11 six"
-    - python: "3.3"
-      env: DEPS="PyQt=4.11 six"
+      env: SIQT_BACKEND="PySide" DEPS="six nose" 
     - python: "2.7"
-      env: DEPS="PyQt=4.11 six"
+      env: SIQT_BACKEND="PyQt5" DEPS="six nose" 
+    - python: "2.7"
+      env: SIQT_BACKEND="PyQt4" DEPS="six nose" 
+    - python: "2.7"
+      env: SIQT_BACKEND="PySide" DEPS="six nose" 
 
 install: 
     - wget http://repo.continuum.io/miniconda/Miniconda${TRAVIS_PYTHON_VERSION:0:1}-latest-Linux-x86_64.sh -O miniconda.sh
@@ -22,14 +26,16 @@ install:
     # Learned the hard way: miniconda is not always up-to-date with conda.
     - conda update --yes conda
     - conda install --yes -c conda conda-env
-    - conda install --yes $DEPS pip python=${TRAVIS_PYTHON_VERSION}
+    - conda create --yes -n siqt-env $DEPS pip python=${TRAVIS_PYTHON_VERSION}
+    - source activate siqt-env
+    - bash ./scripts/travis_setup.sh
     - pip install coveralls
     - python setup.py install
     - cd ~/
     - pwd
 
 script: 
-    - python  -c "import siqt.tests; siqt.tests.run_cli(coverage=True)"
+    - python  -c "from SiQt.siqt import tests; tests.run_cli(coverage=True)"
 
 #after_success:
 #    coveralls

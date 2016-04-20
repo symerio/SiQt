@@ -3,10 +3,8 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-from .qtbase import QtWidgets
 
 import six
-import numpy as np
 
 
 def show_qt_control_element(el):
@@ -17,6 +15,7 @@ def show_qt_control_element(el):
 
 
 def sync_gui(lock=[], update=[], view_mode=None, background=False):
+    from .qtbase import QtWidgets
     def decorator_generator(f):
         def f_wrapper(self, *args, **kwargs):
             # lock some elements if need be
@@ -72,7 +71,7 @@ def check_depflags(dep_flags, expr):
         if not len(res):
             return True
         else:
-            return np.array(res).all()
+            return all(res)
     elif isinstance(expr, six.string_types):
         from .logic_parser import LogicParser
         lp = LogicParser(dep_flags)
@@ -118,12 +117,12 @@ def calculate_dependencies(self, verbose=False, initialize=False):
     for mtype, key, el in dep_list:
         # check if the dependency for this control element is verified
         res = check_depflags(self.dep_flags, el['depends'])
-        if isinstance(res, (bool, np.bool_)):
+        if isinstance(res, bool):
             pass
         elif not len(res):
             res = True
         else:
-            res = np.array(res).all()
+            res = all(res)
         if verbose:
             print('{:10} {:20} {:10} {:10}'.format(mtype, key, el['is_visible'], str(res)))
 
