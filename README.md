@@ -12,7 +12,7 @@ A compatibility library for PyQt4, PyQt5 and PySide.
 
  It can be installed with, 
     
-    pip install https://github.com/rth/siqt.git
+    pip install https://github.com/rth/SiQt.git
 
 
 ## Functionality
@@ -20,19 +20,18 @@ A compatibility library for PyQt4, PyQt5 and PySide.
  SiQt provides several layers of abstraction to work with the existing Python Qt libraries.
 
 
-### 1. Aliasing
+#### 1. Aliasing
  
  The SiQt package will redirect imports to the active PyQt/PySide backend:
 
     import SiQt
     SiQt.use('PyQt4') 
 
-    from SiQt import QtCore # or any other module that would be imported from PyQt4
-    print('Qt:', QtCore.QT_VERSION_STR)
+    from SiQt import QtCore, Qt # or any other modules that would be imported from PyQt4
 
-### 2. Imports interception
+#### 2. Imports interception
 
- Imports of `PyQt4`, `PyQt5`, `PySide` can be intercepted to load `SiQt` instead, which itself
+ Imports of PyQt4, PyQt5, PySide can be intercepted to load SiQt instead (`force=True` option), which itself
 redirects to the active PyQt/PySide backend:
   
 
@@ -42,19 +41,15 @@ redirects to the active PyQt/PySide backend:
     import PyQt4
     from PyQt4 import QtCore
 
-    print('PyQt4.__name__              :', PyQt4.__name__)
-    print('SiQt.backend                :', SiQt.backend)
-    print('PyQt4.QtCore.QT_VERSION_STR :', QtCore.QT_VERSION_STR)
+    print(PyQt4.__name__)        # SiQt
+    print(SiQt.backend)          # PyQt5
+    print(QtCore.QT_VERSION_STR) # 5.5.1
 
-    # Returns:
-    # PyQt4.__name__              : SiQt
-    # SiQt.backend                : PyQt5
-    # PyQt4.QtCore.QT_VERSION_STR : 5.5.1
 
-### 3. Compatibility layer
+#### 3. Compatibility layer
 
- By default, `SiQt.use` is called with the `mode='strict'` argument, which will load the Qt backend exactly as it is.
-Of course, there are some API differences between different backend which would probably result in execution errors. 
+ By default, `SiQt.use` is called with the `mode='compatible'` argument, which attempt to compensate the differences in the API
+ between backends. Alternatively, one can set `mode='compatible'` to avoid this behaviour.
 
 ## Using from the command line
  

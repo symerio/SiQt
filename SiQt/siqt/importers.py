@@ -21,7 +21,7 @@ def _normalise_name(name):
         raise ValueError('SiQt backend {} is not supported!\n Must be one of {}'.format(
                             name, valid_backends))
 
-def use(backend_name, force=False, mode='smooth', matplotlib_hook=False):
+def use(backend_name, force=False, mode='strict', matplotlib_hook=False):
     """
     Initialize a SiQt backend.
 
@@ -32,7 +32,7 @@ def use(backend_name, force=False, mode='smooth', matplotlib_hook=False):
        packages by SiQt
      - mode: the import hooks to use
             * "strict": use the backend as it is
-            * "smooth": monkeypatch the backend to smooth the differences bewteen
+            * "compatible": monkeypatch the backend to smooth the differences bewteen
                         backends (e.g. will add SiQt.QtWidgets with the PyQt4 backend,
                         which was only added in PyQt5)
             * "porting": same as smooth, but prints a warning every time an import hook is used.
@@ -65,6 +65,24 @@ def use(backend_name, force=False, mode='smooth', matplotlib_hook=False):
     if matplotlib_hook:
         sys.meta_path.insert(0, MatplotlibImporter())
 
+
+def _main_init():
+    import os
+
+    pars = {'mode': 'compatible'}
+    if 'SIQT_BACKEND_FORCE' in os.env:
+        pars['backend_name'] = os.env['SIQT_BACKEND_FORCE']
+        pars['force'] = True
+    elif 'SIQT_BACKEND' in os.env:
+        pars['backend_name'] = os.env['SIQT_BACKEND']
+        pars['force'] = False
+    else:
+        raise ValueError('Environemental variables SIQT_BACKEND or SIQT_BACKEND_FORCE not found!')
+
+    if 'SIQT_MODE' in os.env:
+        pars['mode'] = os.env['SIQT_MODE']
+
+    use(**pars)
 
 class MatplotlibImporter(object):
     def __init__(self):
