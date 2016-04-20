@@ -27,11 +27,11 @@ A compatibility library for PyQt4, PyQt5 and PySide.
     import SiQt
     SiQt.use('PyQt4') 
 
-    from SiQt import QtCore, Qt # or any other modules that would be imported from PyQt4
+    from SiQt import QtCore, Qt # or any other module that would be imported from PyQt4
 
 #### 2. Imports interception
 
- Imports of PyQt4, PyQt5, PySide can be intercepted to load SiQt instead (`force=True` option), which itself
+ With the `force=True` option, imports of PyQt4, PyQt5, PySide can be intercepted to load SiQt instead, which itself
 redirects to the active PyQt/PySide backend:
   
 
@@ -48,12 +48,12 @@ redirects to the active PyQt/PySide backend:
 
 #### 3. Compatibility layer
 
- By default, `SiQt.use` is called with the `mode='compatible'` argument, which attempt to compensate the differences in the API
- between backends. Alternatively, one can set `mode='compatible'` to avoid this behaviour.
+ By default, `SiQt.use` is called with the `mode='compatible'` argument, which attempts to compensate the differences in the API
+ between backends. Alternatively, one can set `mode='strict'` to avoid this behaviour.
 
 ## Using from the command line
  
- It is possible to use SiQt directly from the command line as follows,
+ SiQt can be directly used from the command line as follows,
 
     SIQT_BACKEND_FORCE='PySide' python -m SiQt my_pyqt4_gui.py
 
