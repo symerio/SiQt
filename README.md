@@ -1,6 +1,6 @@
 # SiQt
 
-[![Build Status](https://travis-ci.org/rth/siqt.svg?branch=master)](https://travis-ci.org/rth/siqt)
+[![Build Status](https://travis-ci.org/rth/SiQt.svg?branch=master)](https://travis-ci.org/rth/SiQt)
 
 
 A compatibility library for PyQt4, PyQt5 and PySide.
@@ -12,7 +12,7 @@ A compatibility library for PyQt4, PyQt5 and PySide.
 
  It can be installed with, 
     
-    pip install https://github.com/rth/SiQt.git
+    pip install git+https://github.com/rth/SiQt.git
 
 
 ## Functionality

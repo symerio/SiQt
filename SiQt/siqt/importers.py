@@ -203,15 +203,13 @@ class RenameImportLoader(object):
             print(name, self.name_new,  fp, pathname, description)
             try:
                 print(self.name_orig)
-                print(description[-1])
-                if description[-1] == 3: # dynamic library
-                    try:
-                        module = imp.load_dynamic(self.name_orig, pathname)
-                    except:
-                        print('Trying again')
-                        module = imp.load_dynamic(self.name_orig, pathname)
-                else:
-                    module = imp.load_module(self.name_orig, fp, pathname, description)
+                module = imp.load_module(self.name_orig, fp, pathname, description)
+            except Exception as e:
+                #if six.PY2:
+                #    import importlib
+                #    module = importlib.import_module(self.name_orig) 
+                #else:
+                raise e
             finally:
                 if fp:
                     fp.close()
