@@ -3,7 +3,7 @@
 
 # to upload to PyPi, see
 # https://stackoverflow.com/questions/14219499/pypi-server-response-500 
-# from distutils.core import setup
+#from distutils.core import setup
 from setuptools import setup
 import os
 import sys
@@ -21,22 +21,26 @@ if mo:
 else:
     raise RuntimeError("Unable to find version string in %s." % (VERSIONFILE,))
 
+with open('README.rst', 'r') as fh:
+    long_description = fh.read()
+
 
 setup(name='SiQt',
       version=version,
       description='A compatibility library for PyQt4, PyQt5 and PySide',
       author='Roman Yurchak',
+      author_email='rth.yurchak@gmail.com',
+      url='https://github.com/rth/SiQt',
       license='MIT',
       packages=['SiQt'],
-      include_package_data=True,
       install_requires=['six'],
-      test_suite="SiQt.siqt.tests.run",
+      long_description=long_description,
       classifiers=[
       # How mature is this project? Common values are
       #   3 - Alpha
       #   4 - Beta
       #   5 - Production/Stable
-      'Development Status :: 2 - Pre-Alpha',
+      #'Development Status :: 2 - Pre-Alpha',
 
       # Indicate who your project is intended for
       'Intended Audience :: Developers',
@@ -53,7 +57,6 @@ setup(name='SiQt',
       'Programming Language :: Python :: 3.3',
       'Programming Language :: Python :: 3.4',
       'Programming Language :: Python :: 3.5',
-
       ],
      )
 
