@@ -21,7 +21,7 @@ It can be installed with,
 Quick start
 -----------
 
-Assuming you have GUI script ``my_pyqt4_gui.py`` written with PyQt4 (or any other backend), you can attempt to run it with PySide (or any other backend) using,
+Assuming you have a GUI script ``my_pyqt4_gui.py`` written with PyQt4 (or any other backend), you can attempt to run it with PySide (or any other backend) using,
 
 ::
 
