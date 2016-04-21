@@ -1,10 +1,6 @@
 include README.md
 recursive-include scripts *.bat
 recursive-include scripts *.py
-recursive-include taspectreg *.csv
-recursive-include taspectreg *.csv.gz
-recursive-include taspectreg *.py
+recursive-include SiQt *.csv
+recursive-include SiQt *.py
 recursive-include examples *.py
-recursive-include examples *.csv
-recursive-include examples *.csv.gz
-recursive-include examples *.png
