@@ -48,11 +48,11 @@ redirects to the active PyQt/PySide backend:
     SiQt.use('PyQt5', force=True)
 
     import PyQt4
-    from PyQt4 import QtCore
+    import PyQt4.QtCore
 
-    print(PyQt4.__name__)        # SiQt
-    print(SiQt.backend)          # PyQt5
-    print(QtCore.QT_VERSION_STR) # 5.5.1
+    print(PyQt4.__name__)              # SiQt
+    print(SiQt.backend)                # PyQt5
+    print(PyQt4.QtCore.QT_VERSION_STR) # 5.5.1
 
 
 #### 3. Compatibility layer
