@@ -67,24 +67,6 @@ def use(backend_name, force=False, mode='strict', matplotlib_hook=False):
         sys.meta_path.insert(0, MatplotlibImporter())
 
 
-def _main_init():
-    import os
-
-    pars = {'mode': 'compatible'}
-    if 'SIQT_BACKEND_FORCE' in os.env:
-        pars['backend_name'] = os.env['SIQT_BACKEND_FORCE']
-        pars['force'] = True
-    elif 'SIQT_BACKEND' in os.env:
-        pars['backend_name'] = os.env['SIQT_BACKEND']
-        pars['force'] = False
-    else:
-        raise ValueError('Environemental variables SIQT_BACKEND or SIQT_BACKEND_FORCE not found!')
-
-    if 'SIQT_MODE' in os.env:
-        pars['mode'] = os.env['SIQT_MODE']
-
-    use(**pars)
-
 class MatplotlibImporter(object):
     def __init__(self):
         pass
