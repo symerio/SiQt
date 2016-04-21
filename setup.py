@@ -4,7 +4,7 @@
 # to upload to PyPi, see
 # https://stackoverflow.com/questions/14219499/pypi-server-response-500 
 #from distutils.core import setup
-from setuptools import setup
+from setuptools import setup, find_packages
 import os
 import sys
 import re
@@ -32,7 +32,7 @@ setup(name='SiQt',
       author_email='rth.yurchak@gmail.com',
       url='https://github.com/rth/SiQt',
       license='MIT',
-      packages=['SiQt'],
+      packages=find_packages(),
       install_requires=['six'],
       long_description=long_description,
       classifiers=[
