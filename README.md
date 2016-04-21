@@ -5,6 +5,8 @@
 
 A compatibility library for PyQt4, PyQt5 and PySide.
 
+**This is an alpha version that should not be used in production as this API may change in the future.**
+
 
 ## Installation
 
@@ -14,6 +16,13 @@ A compatibility library for PyQt4, PyQt5 and PySide.
     
     pip install git+https://github.com/rth/SiQt.git
 
+## Quick start
+ 
+ The most direct way of using SiQt is from command line. Assuming you have GUI script `my_pyqt4_gui.py` written with PyQt4 (or any backend), you can attempt to run it with PySide (or any other backend) with,
+
+    SIQT_BACKEND_FORCE='PySide' python -m SiQt my_pyqt4_gui.py
+
+*Note that the compatibility hooks are still being actively developped and this may fail due to API differences* 
 
 ## Functionality
 
@@ -29,7 +38,7 @@ A compatibility library for PyQt4, PyQt5 and PySide.
 
     from SiQt import QtCore, Qt # or any other module that would be imported from PyQt4
 
-#### 2. Imports interception
+#### 2. Import interception
 
  With the `force=True` option, imports of PyQt4, PyQt5, PySide can be intercepted to load SiQt instead, which itself
 redirects to the active PyQt/PySide backend:
@@ -49,13 +58,19 @@ redirects to the active PyQt/PySide backend:
 #### 3. Compatibility layer
 
  By default, `SiQt.use` is called with the `mode='compatible'` argument, which attempts to compensate the differences in the API
- between backends. Alternatively, one can set `mode='strict'` to avoid this behaviour.
+ between backends (*in developpement*). Alternatively, one can set `mode='strict'` to avoid this behaviour.
 
-## Using from the command line
+## Command line use
  
- SiQt can be directly used from the command line as follows,
+ Most of the SiQt functionality is acessible through command line, where the `SiQt.use` arguments can be passed as envoronement variables:
 
-    SIQT_BACKEND_FORCE='PySide' python -m SiQt my_pyqt4_gui.py
+   - `SIQT_BACKEND='name'` is equivalent to `SiQt.use('name', force=False)`
+   - `SIQT_BACKEND_FORCE='name'` is equivalent to `SiQt.use('name', force=True)`
+   - `SIQT_MODE='name'` is equivalent to `SiQt.use(..., mode='mode')`
+
+ SiQt can be enabled on any script without changing its source code, with
+
+    SIQT_BACKEND=.. python -m SiQt  original_script.py
 
 ## Unit tests
 
