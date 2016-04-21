@@ -5,7 +5,7 @@
 
 A compatibility library for PyQt4, PyQt5 and PySide.
 
-**This is an alpha version that should not be used in production as this API may change in the future.**
+*This is an alpha version that should not be used in production as this API may change in the future.*
 
 
 ## Installation
@@ -18,7 +18,7 @@ A compatibility library for PyQt4, PyQt5 and PySide.
 
 ## Quick start
  
- The most direct way of using SiQt is from command line. Assuming you have GUI script `my_pyqt4_gui.py` written with PyQt4 (or any backend), you can attempt to run it with PySide (or any other backend) with,
+ The most direct way of using SiQt is from command line. Assuming you have GUI script `my_pyqt4_gui.py` written with PyQt4 (or any other backend), you can attempt to run it with PySide (or any other backend) using,
 
     SIQT_BACKEND_FORCE='PySide' python -m SiQt my_pyqt4_gui.py
 
@@ -68,7 +68,8 @@ redirects to the active PyQt/PySide backend:
    - `SIQT_BACKEND_FORCE='name'` is equivalent to `SiQt.use('name', force=True)`
    - `SIQT_MODE='name'` is equivalent to `SiQt.use(..., mode='mode')`
 
- SiQt can be enabled on any script without changing its source code, with
+
+SiQt can be enabled on any script without changing its source code, with
 
     SIQT_BACKEND=.. python -m SiQt  original_script.py
 
