@@ -11,3 +11,5 @@ test2:
 	python2 /usr/bin/nosetests -s SiQt --with-coverage --cover-package=SiQt
 test3: 
 	python3 /usr/bin/nosetests -s SiQt --with-coverage --cover-package=SiQt
+
+# twine upload -s dist/

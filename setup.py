@@ -1,6 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+# to upload to PyPi, see
+# https://stackoverflow.com/questions/14219499/pypi-server-response-500 
+# from distutils.core import setup
 from setuptools import setup
 import os
 import sys
