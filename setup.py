@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from setuptools import setup, find_packages
+from setuptools import setup
 import os
 import sys
 import re
@@ -24,7 +24,7 @@ setup(name='SiQt',
       description='A compatibility library for PyQt4, PyQt5 and PySide',
       author='Roman Yurchak',
       license='MIT',
-      packages=find_packages(),
+      packages=['SiQt'],
       include_package_data=True,
       install_requires=['six'],
       test_suite="SiQt.siqt.tests.run",
@@ -51,9 +51,6 @@ setup(name='SiQt',
       'Programming Language :: Python :: 3.4',
       'Programming Language :: Python :: 3.5',
 
-      'Operating System :: Microsoft :: Windows',
-      'Operating System :: MacOS',
-      'Operating System :: POSIX :: Linux'
       ],
      )
 
