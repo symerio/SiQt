@@ -33,7 +33,7 @@ setup(name='SiQt',
       #   3 - Alpha
       #   4 - Beta
       #   5 - Production/Stable
-      'Development Status :: 3 - Alpha',
+      'Development Status :: 2 - Pre-Alpha',
 
       # Indicate who your project is intended for
       'Intended Audience :: Developers',
@@ -50,6 +50,10 @@ setup(name='SiQt',
       'Programming Language :: Python :: 3.3',
       'Programming Language :: Python :: 3.4',
       'Programming Language :: Python :: 3.5',
+
+      'Operating System :: Microsoft :: Windows',
+      'Operating System :: MacOS',
+      'Operating System :: POSIX :: Linux'
       ],
      )
 

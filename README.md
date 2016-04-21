@@ -5,7 +5,7 @@
 
 A compatibility library for PyQt4, PyQt5 and PySide.
 
-*Warning: This is an alpha version that should not be used in production. Backward compatibility is not guaranteed at this point.*
+*Warning: This is a pre-alpha version that should not be used in production. Backward compatibility is not guaranteed at this point.*
 
 
 ## Installation
@@ -26,7 +26,7 @@ A compatibility library for PyQt4, PyQt5 and PySide.
 
 ## Functionality
 
- SiQt provides several layers of abstraction to work with the existing Python Qt libraries.
+ SiQt provides a layer of bstraction to work with the existing Python Qt libraries.
 
 
 #### 1. Aliasing
