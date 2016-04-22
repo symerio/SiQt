@@ -1,5 +1,5 @@
 sdist:
-	make stamp; make release_notes; python setup.py sdist --formats=zip; 
+	rm dist/SiQt*; make stamp; python setup.py sdist bdist_wheel; 
 
 stamp:
 	sed -i '$$ d' siqt/__init__.py ; sed -i '$$ d' siqt/__init__.py ; echo '__version_date__ = "'`git log --pretty=format:'%cd' -n 1`'"' >> siqt/__init__.py; echo '__version_hash__ = "'`git log --pretty=format:'%h' -n 1`'"' >> siqt/__init__.py
@@ -12,4 +12,6 @@ test2:
 test3: 
 	python3 /usr/bin/nosetests -s SiQt --with-coverage --cover-package=SiQt
 
-# twine upload -s dist/
+upload:
+	#twine upload -s dist/*.whl
+	twine upload -s dist/*.tar.gz
