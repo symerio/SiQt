@@ -9,14 +9,14 @@ from collections import OrderedDict
 
 import six
 
-from .qtbase import QtCore
-from .qtbase import QtGui
-from .qtbase import QtWidgets
+from .. import QtCore
+from .. import QtGui
+QtWidgets = QtGui
 
 from .dep_resolv import dependency_graph, calculate_dependencies
 
 try:
-    from .qtbase.QtCore import QString
+    from .QtCore import QString
 except ImportError:
     QString = str
 

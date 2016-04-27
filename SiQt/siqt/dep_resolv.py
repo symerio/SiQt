@@ -15,7 +15,7 @@ def show_qt_control_element(el):
 
 
 def sync_gui(lock=[], update=[], view_mode=None, background=False):
-    from .qtbase import QtWidgets
+    from .. import QtGui
     def decorator_generator(f):
         def f_wrapper(self, *args, **kwargs):
             # lock some elements if need be
@@ -34,7 +34,7 @@ def sync_gui(lock=[], update=[], view_mode=None, background=False):
             for key in update:
                 self.set_dep_flag_recursive(key, True)
 
-            QtWidgets.QApplication.processEvents()
+            QtGui.QApplication.processEvents()
 
             f(self, *args, **kwargs)
 

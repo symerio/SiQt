@@ -59,7 +59,8 @@ def use(backend_name, force=False, mode='strict', matplotlib_hook=False):
         path_new = pkg.filename
     this.__path__.append(path_new)
 
-    sys.meta_path.insert(0, RenameImportFinder())
+    if force:
+        sys.meta_path.insert(0, RenameImportFinder())
     if six.PY2:
         if this.backend in ['PyQt4', 'PyQt5']:
             import sip # just initializing
@@ -94,7 +95,7 @@ class RenameImportFinder(object):
         # Handles hierarchical importing: package.module.module2
         for name in valid_backends:
             if fullname.startswith(name):
-                print('Finding', fullname, path)
+                #print('Finding', fullname, path)
                 return RenameImportLoader(fullname, path)
         return None
 
@@ -172,6 +173,10 @@ class RenameImportLoader(object):
             print(name, self.name_new,  fp, pathname, description)
             try:
                 #print(self.name_orig)
+                #if six.PY2:
+                #    import importlib
+                #    module = importlib.import_module(self.name_orig)
+                #else:
                 module = imp.load_module(self.name_orig, fp, pathname, description)
             except Exception as e:
                 #if six.PY2:
