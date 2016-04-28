@@ -14,3 +14,13 @@ this = sys.modules[__name__]
 this.backend = None
 
 use = siqt.importers.use
+
+# a temporary hack to use PyQt4 backend
+import PyQt4 as PyQt
+from PyQt4 import QtCore
+from PyQt4 import QtGui
+from PyQt4 import Qt
+QtPrintSupport = QtGui
+QtWidgets = QtGui
+QtCore.Signal = QtCore.pyqtSignal
+QtCore.Slot = QtCore.pyqtSlot

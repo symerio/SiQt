@@ -53,19 +53,19 @@ def use(backend_name, force=False, mode='strict', matplotlib_hook=False):
               '         Changing backend on the runtime (i.e. calling it a second time) is not supported!')
         return
     this.backend = name
-    if six.PY3:
-        path_new = os.path.dirname(pkg.path)
-    else:
-        path_new = pkg.filename
-    this.__path__.append(path_new)
+    #if six.PY3:
+    #    path_new = os.path.dirname(pkg.path)
+    #else:
+    #    path_new = pkg.filename
+    #this.__path__.append(path_new)
 
-    if force:
-        sys.meta_path.insert(0, RenameImportFinder())
-    if six.PY2:
-        if this.backend in ['PyQt4', 'PyQt5']:
-            import sip # just initializing
-    if matplotlib_hook:
-        sys.meta_path.insert(0, MatplotlibImporter())
+    #if force:
+    #    sys.meta_path.insert(0, RenameImportFinder())
+    #if six.PY2:
+    #    if this.backend in ['PyQt4', 'PyQt5']:
+    #        import sip # just initializing
+    #if matplotlib_hook:
+    #    sys.meta_path.insert(0, MatplotlibImporter())
 
 
 class MatplotlibImporter(object):
