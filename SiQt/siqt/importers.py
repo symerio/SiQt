@@ -143,7 +143,7 @@ class RenameImportLoader(object):
         Finds and loads it. But if there's a . in the name, handles it
         properly.
         """
-        print('3.', name, path)
+        #print('3.', name, path)
         import imp
         bits = name.split('.')
         while len(bits) > 1:
@@ -170,7 +170,7 @@ class RenameImportLoader(object):
         else:
             #print('4.', name, path)
             fp, pathname, description = imp.find_module(name, path)
-            print(name, self.name_new,  fp, pathname, description)
+            #print(name, self.name_new,  fp, pathname, description)
             try:
                 #print(self.name_orig)
                 #if six.PY2:
