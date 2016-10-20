@@ -5,7 +5,8 @@ SiQt
 
 A compatibility library for PyQt4, PyQt5 and PySide.
 
-*Warning: This is a pre-alpha version that should not be used in production. Backward compatibility is not guaranteed at this point.*
+**Update:** this project is not maintanted anymore and not ready for production; you should use [QtPy](https://github.com/spyder-ide/qtpy) instead.
+
 
 Installation
 ------------
