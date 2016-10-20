@@ -3,17 +3,17 @@ sudo: false
 matrix:
     include:
     - python: "3.5"
-      env: SIQT_BACKEND="PyQt5" DEPS="six nose" 
+      env: SIQT_BACKEND="PyQt5" DEPS="six nose pyqt" 
     - python: "3.5"
-      env: SIQT_BACKEND="PyQt4" DEPS="six nose" 
+      env: SIQT_BACKEND="PyQt4" DEPS="six nose pyqt==4.11.4" 
     - python: "3.4"
-      env: SIQT_BACKEND="PySide" DEPS="six nose" 
+      env: SIQT_BACKEND="PySide" DEPS="six nose pyside" 
     - python: "2.7"
-      env: SIQT_BACKEND="PyQt5" DEPS="six nose" 
+      env: SIQT_BACKEND="PyQt5" DEPS="six nose pyqt" 
     - python: "2.7"
-      env: SIQT_BACKEND="PyQt4" DEPS="six nose" 
+      env: SIQT_BACKEND="PyQt4" DEPS="six nose pyqt==4.11.4" 
     - python: "2.7"
-      env: SIQT_BACKEND="PySide" DEPS="six nose" 
+      env: SIQT_BACKEND="PySide" DEPS="six nose pyside" 
 
 install: 
     - wget http://repo.continuum.io/miniconda/Miniconda${TRAVIS_PYTHON_VERSION:0:1}-latest-Linux-x86_64.sh -O miniconda.sh
@@ -21,13 +21,9 @@ install:
     - ./miniconda.sh -b
     - export PATH=/home/travis/miniconda${TRAVIS_PYTHON_VERSION:0:1}/bin:$PATH
     # See: https://groups.google.com/a/continuum.io/forum/#!topic/conda/RSFENqovnro
-    - conda update --yes --no-deps conda
-    - conda config --set always_yes yes --set changeps1 no
-    # Learned the hard way: miniconda is not always up-to-date with conda.
     - conda update --yes conda
-    - conda install --yes -c conda conda-env
-    - conda create --yes -n siqt-env $DEPS pip python=${TRAVIS_PYTHON_VERSION}
-    - source activate siqt-env
+    - conda config --set always_yes yes --set changeps1 no
+    - conda install $DEPS python=${TRAVIS_PYTHON_VERSION}
     - bash ./scripts/travis_setup.sh
     - pip install coveralls
     - python setup.py install
