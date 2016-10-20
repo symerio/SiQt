@@ -24,3 +24,4 @@ QtPrintSupport = QtGui
 QtWidgets = QtGui
 QtCore.Signal = QtCore.pyqtSignal
 QtCore.Slot = QtCore.pyqtSlot
+

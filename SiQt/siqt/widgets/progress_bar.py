@@ -7,9 +7,9 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 
-from ..qtbase import QtCore
-from ..qtbase import QtGui
-from ..qtbase import QtWidgets
+from qtpy import QtCore
+from qtpy import QtGui
+from qtpy import QtWidgets
 
 
 from ..dep_resolv import calculate_dependencies
@@ -55,7 +55,7 @@ class ProgressBarWidget(QtWidgets.QWidget):
 
 
 class TaskThread(QtCore.QThread):
-    taskFinished = QtCore.pyqtSignal()
+    #taskFinished = QtCore.pyqtSignal()
 
     def __init__(self, parent, main_window):
         QtCore.QThread.__init__(self, parent)
@@ -67,7 +67,7 @@ class TaskThread(QtCore.QThread):
 
 
 class ProgressThread(QtCore.QThread):
-    notifyProgress = QtCore.pyqtSignal(int)
+    #notifyProgress = QtCore.pyqtSignal(int)
 
     def __init__(self, parent, main_window):
         QtCore.QThread.__init__(self, parent)

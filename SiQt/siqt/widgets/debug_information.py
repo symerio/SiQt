@@ -6,8 +6,8 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-from ..qtbase import QtCore
-from ..qtbase import QtWidgets
+from qtpy import QtCore
+from qtpy import QtWidgets
 
 from ..tests import get_system_info
 

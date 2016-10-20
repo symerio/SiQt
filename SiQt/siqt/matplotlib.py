@@ -8,6 +8,7 @@ from __future__ import unicode_literals
 from .. import this
 
 import matplotlib
+print(this.backend)
 
 if this.backend == 'PyQt4':
     PyQtAgg_str = 'Qt4Agg'

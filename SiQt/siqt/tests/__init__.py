@@ -6,8 +6,8 @@ import sys
 from .run_suite import run, run_cli
 
 def get_system_info(pretty_print=False):
-    import siqt
-    from siqt import QtCore
+    import SiQt
+    from qtpy import QtCore
     import platform
     system = {}
     for key in ['architecture', 'machine', 'platform', 'processor',
@@ -51,14 +51,6 @@ def get_system_info(pretty_print=False):
         sv['matplotlib'] = mpl.__version__
     except ImportError:
         sv['matplotlib'] = "Not installed"
-    if 'PyQt' in siqt.SIQT_BACKEND:
-        from siqt import Qt
-        sv['Qt'] = QtCore.QT_VERSION_STR
-        sv['PyQt'] = Qt.PYQT_VERSION_STR
-    elif 'PySide' in siqt.SIQT_BACKEND:
-        import PySide
-        sv['Qt'] = QtCore.__version__
-        sv['PySide'] = PySide.__version__
     else:
         raise NotImplementedError
 
