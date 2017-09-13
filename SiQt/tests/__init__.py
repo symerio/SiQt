@@ -1,13 +1,9 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import
 
 import sys
-from .run_suite import run, run_cli
+import qtpy
+
 
 def get_system_info(pretty_print=False):
-    import siqt
-    from siqt import QtCore
     import platform
     system = {}
     for key in ['architecture', 'machine', 'platform', 'processor',
@@ -19,13 +15,13 @@ def get_system_info(pretty_print=False):
         res = getattr(platform, key)()
         if res[0]:
             system[key] = res
-    if  sys.maxsize > 2**32:
+    if sys.maxsize > 2**32:
         system['architecture_size'] = '64 bits'
     else:
         system['architecture_size'] = '32 bits'
 
     python = {}
-    for key in [ 'python_implementation', 'python_version', 'python_compiler']:
+    for key in ['python_implementation', 'python_version', 'python_compiler']:
         python[key] = getattr(platform, key)()
 
     sv = {}
@@ -51,18 +47,16 @@ def get_system_info(pretty_print=False):
         sv['matplotlib'] = mpl.__version__
     except ImportError:
         sv['matplotlib'] = "Not installed"
-    if 'PyQt' in siqt.SIQT_BACKEND:
-        from siqt import Qt
-        sv['Qt'] = QtCore.QT_VERSION_STR
-        sv['PyQt'] = Qt.PYQT_VERSION_STR
-    elif 'PySide' in siqt.SIQT_BACKEND:
-        import PySide
-        sv['Qt'] = QtCore.__version__
-        sv['PySide'] = PySide.__version__
-    else:
-        raise NotImplementedError
 
-
+    for key in ['PYQT4', 'PYQT4_API', 'PYQT5', 'PYQT5_API',
+                'PYQT_VERSION', 'PYSIDE', 'PYSIDE2', 'PYSIDE2_API',
+                'PYSIDE_API', 'PYSIDE_VERSION', 'QT_API', 'QT_VERSION']:
+        try:
+            val = getattr(qtpy, key)
+            if val:
+                sv[key] = val
+        except:
+            pass
 
     if not pretty_print:
         return {'system': system, 'python': python, 'software_versions': sv}
@@ -78,6 +72,5 @@ def get_system_info(pretty_print=False):
                     val = ' '.join(val)
                 s.append(FMT.format(key, val))
         s.append('')
-        
 
         return '\n'.join(s)

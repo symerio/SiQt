@@ -1,28 +1,24 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-
 from collections import OrderedDict
 
-import six
-
-from .qtbase import QtCore
-from .qtbase import QtGui
-from .qtbase import QtWidgets
+from qtpy import QtCore
+from qtpy import QtGui
+from qtpy import QtWidgets
 
 from .dep_resolv import dependency_graph, calculate_dependencies
 
 try:
-    from .qtbase.QtCore import QString
+    from qtpy.QtCore import QString
 except ImportError:
     QString = str
 
 
+#
+# Helper functions functions to setup the GUI
+#
 
-# The following functions are helper functions to setup the GUI
+
 def add_actions(self, target, actions):
     for action in actions:
         if action is None:
@@ -31,9 +27,9 @@ def add_actions(self, target, actions):
             target.addAction(action)
 
 
-def create_action(self, text, slot=None, shortcut=None, 
-                    icon=None, tip=None, checkable=False, 
-                    signal="triggered"):
+def create_action(self, text, slot=None, shortcut=None,
+                  icon=None, tip=None, checkable=False,
+                  signal="triggered"):
     action = QtWidgets.QAction(text, self)
     if icon is not None:
         action.setIcon(QtWidgets.QIcon(":/%s.png" % icon))
@@ -66,11 +62,10 @@ def menu_generator(self, name, label, elements):
         return f
 
     idx = 1
-    for key, menu_el  in elements.items():
+    for key, menu_el in elements.items():
         if menu_el is None:
             self.menu[name].addSeparator()
             continue
-
 
         pars = self.menu[name].elmts[key]
 
@@ -84,13 +79,14 @@ def menu_generator(self, name, label, elements):
 
         tpars = pars.copy()
         for tkey in ['depends', 'enabled']:
-            if tkey in tpars: 
+            if tkey in tpars:
                 del tpars[tkey]
         action = self.create_action(**tpars)
-        if pars['depends']:  # has some dependecies meaning can't be used initially
+        # has some dependecies meaning can't be used initially
+        if pars['depends']:
             action.setDisabled(True)
 
-        if 'enabled' in pars and not pars['enabled']: 
+        if 'enabled' in pars and not pars['enabled']:
             action.setDisabled(True)
         self.menu[name].addAction(action)
 
@@ -100,8 +96,8 @@ def menu_generator(self, name, label, elements):
 
 
 def set_dep_flag_recursive(self, key, value, sync=False):
-    """
-    Change status for a dependent field, and pull all the fields that are dependent on it.
+    """ Change status for a dependent field,
+    and pull all the fields that are dependent on it.
     """
     self.dep_flags[key] = value
     for dkey in dependency_graph(key, self.dep_graph):
@@ -112,25 +108,27 @@ def set_dep_flag_recursive(self, key, value, sync=False):
 
 class SiqtElement(dict):
 
-    def __init__(self, qtobj, layout=None, position=None, depends=[], dtype=str, **args):
+    def __init__(self, qtobj, layout=None, position=None,
+                 depends=[], dtype=str, **args):
         """
         A helper class to work with the underlying QtObject
         """
-        if isinstance(qtobj, six.string_types):
-            qtobj = QtWidgets.QLabel(qtobj)  # if given a string, this is probably a label
+        if isinstance(qtobj, str):
+            # if given a string, this is probably a label
+            qtobj = QtWidgets.QLabel(qtobj)
         self.dtype = dtype
         if isinstance(qtobj, QtWidgets.QLineEdit) and dtype != str:
-            if dtype in [float]: #, np.float]:
+            if dtype in [float]:  # , np.float]:
                 validator = QtGui.QDoubleValidator()
                 qtobj.setValidator(validator)
                 args['validator'] = validator
-            elif dtype in [int]: #, np.int]:
+            elif dtype in [int]:  # , np.int]:
                 validator = QtGui.QIntValidator()
                 qtobj.setValidator(validator)
                 args['validator'] = validator
         if isinstance(qtobj, QtWidgets.QComboBox) and 'choices' in args:
             args['choices'] = OrderedDict(args['choices'])
-            for key, val in args['choices'].items(): 
+            for key, val in args['choices'].items():
                 qtobj.addItem(QString(key), val)
 
         super(SiqtElement, self).__init__(qtobj=qtobj, depends=depends, **args)
@@ -142,9 +140,11 @@ class SiqtElement(dict):
         self['qtobj'].setText(value)
 
     def set_choices(self, choices):
-        control  = self['qtobj']
-        if not isinstance(control, (QtWidgets.QComboBox, QtWidgets.QListWidget)):
-            raise NotImplementedError('set_choices is only valid for a QComboBox element')
+        control = self['qtobj']
+        if not isinstance(control,
+                          (QtWidgets.QComboBox, QtWidgets.QListWidget)):
+            raise NotImplementedError('set_choices is only valid '
+                                      'for a QComboBox element')
 
         control.blockSignals(True)
         if isinstance(control, QtWidgets.QComboBox):
@@ -166,7 +166,7 @@ class SiqtElement(dict):
         qtobj = self['qtobj']
         if isinstance(qtobj, QtWidgets.QCheckBox):
             if value:
-                value =  QtCore.Qt.Checked
+                value = QtCore.Qt.Checked
             else:
                 value = QtCore.Qt.Unchecked
             qtobj.setCheckState(value)
@@ -176,8 +176,6 @@ class SiqtElement(dict):
             raise NotImplementedError
         else:
             qtobj.setText(str(value))
-
-
 
     @property
     def value(self):
@@ -202,9 +200,3 @@ class SiqtElement(dict):
         In this case call the qtobject methods """
 
         return getattr(self['qtobj'],  name)
-
-
-
-
-
-

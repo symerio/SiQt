@@ -1,34 +1,25 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-
-
-from ..qtbase import QtCore
-from ..qtbase import QtGui
-from ..qtbase import QtWidgets
+from qtpy import QtCore
+from qtpy import QtGui
+from qtpy import QtWidgets
 
 
 from ..dep_resolv import calculate_dependencies
 
+
 class ProgressBarWidget(QtWidgets.QWidget):
 
-    def __init__(self, main_window, parent = None):
+    def __init__(self, main_window, parent=None):
         super(ProgressBarWidget, self).__init__(parent)
         layout = QtGui.QVBoxLayout(self)
         self.setGeometry(QtCore.QRect(100, 100, 400, 200))
 
         # Create a progress bar and a button and add them to the main layout
         self.progressBar = QtGui.QProgressBar(self)
-        self.progressBar.setRange(0,100)
+        self.progressBar.setRange(0, 100)
         layout.addWidget(self.progressBar)
 
         self.myLongTask = TaskThread(parent, main_window)
         self.progressTask = ProgressThread(parent, main_window)
-        #self.progressBar.setRange(0,0)
         self.myLongTask.start()
         self.progressTask.start()
         self.myLongTask.taskFinished.connect(self.onFinished)
@@ -36,13 +27,12 @@ class ProgressBarWidget(QtWidgets.QWidget):
         self.progressTask.notifyProgress.connect(self.onProgress)
         self.base = main_window
 
-
     def onProgress(self, i):
         self.progressBar.setValue(i)
 
-
     def onFinished(self):
-        self.base.tabs['convolution']['threshold_slider']['qtobj'].setRange(0, self.base.gpr.cxx_max.max())
+        obj = self.base.tabs['convolution']['threshold_slider']['qtobj']
+        obj.setRange(0, self.base.gpr.cxx_max.max())
 
         self.base.view_mode = 'convolution'
         self.base.on_draw()
@@ -55,7 +45,7 @@ class ProgressBarWidget(QtWidgets.QWidget):
 
 
 class TaskThread(QtCore.QThread):
-    taskFinished = QtCore.pyqtSignal()
+    taskFinished = QtCore.Signal()
 
     def __init__(self, parent, main_window):
         QtCore.QThread.__init__(self, parent)
@@ -63,11 +53,11 @@ class TaskThread(QtCore.QThread):
 
     def run(self):
         self.base.gpr.convolve()
-        self.taskFinished.emit()  
+        self.taskFinished.emit()
 
 
 class ProgressThread(QtCore.QThread):
-    notifyProgress = QtCore.pyqtSignal(int)
+    notifyProgress = QtCore.Signal(int)
 
     def __init__(self, parent, main_window):
         QtCore.QThread.__init__(self, parent)
@@ -77,7 +67,7 @@ class ProgressThread(QtCore.QThread):
         from time import sleep
         res = 0
         self.base.gpr.conv_progress = 0
-        while res<98:
+        while res < 98:
             res = int(self.base.gpr.conv_progress)
             self.notifyProgress.emit(res)
             sleep(0.5)

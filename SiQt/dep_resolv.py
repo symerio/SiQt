@@ -1,21 +1,14 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
-
-import six
+from qtpy import QtWidgets
 
 
 def show_qt_control_element(el):
+
     def f(status=False):
-        #el.setDisabled(not status)
         el.setEnabled(status)
     return f
 
 
 def sync_gui(lock=[], update=[], view_mode=None, background=False):
-    from .qtbase import QtWidgets
     def decorator_generator(f):
         def f_wrapper(self, *args, **kwargs):
             # lock some elements if need be
@@ -29,7 +22,6 @@ def sync_gui(lock=[], update=[], view_mode=None, background=False):
                     for key in p:
                         p[key]['show'](False)
                         p[key]['is_visible'] = False
-
 
             for key in update:
                 self.set_dep_flag_recursive(key, True)
@@ -45,6 +37,7 @@ def sync_gui(lock=[], update=[], view_mode=None, background=False):
                 calculate_dependencies(self, verbose=False)
         return f_wrapper
     return decorator_generator
+
 
 def dependency_graph(key, storage):
     out = []
@@ -72,15 +65,13 @@ def check_depflags(dep_flags, expr):
             return True
         else:
             return all(res)
-    elif isinstance(expr, six.string_types):
+    elif isinstance(expr, str):
         from .logic_parser import LogicParser
         lp = LogicParser(dep_flags)
         return lp(expr)
 
     else:
         raise NotImplementedError
-
-
 
 
 def calculate_dependencies(self, verbose=False, initialize=False):
@@ -91,7 +82,7 @@ def calculate_dependencies(self, verbose=False, initialize=False):
     dep_list = []
 
     for menu_el in self.menu.values():
-        for key, el in  menu_el.elmts.items():
+        for key, el in menu_el.elmts.items():
             if el is None:
                 continue
             if 'enabled' in el and not el['enabled']:
@@ -101,13 +92,12 @@ def calculate_dependencies(self, verbose=False, initialize=False):
         dep_list.append(('controls', key, el))
 
     for tab_name, tab_el in self.tabs.items():
-        for key, el in  tab_el.items():
+        for key, el in tab_el.items():
             dep_list.append(('tabs', key, el))
-
 
     if initialize:
         for tab_name, tab_el in self.tabs.items():
-            for key, el in  tab_el.items():
+            for key, el in tab_el.items():
                 if 'show' not in el:
                     el['show'] = show_qt_control_element(el['qtobj'])
         for mtype, key, el in dep_list:
@@ -124,7 +114,8 @@ def calculate_dependencies(self, verbose=False, initialize=False):
         else:
             res = all(res)
         if verbose:
-            print('{:10} {:20} {:10} {:10}'.format(mtype, key, el['is_visible'], str(res)))
+            print('{:10} {:20} {:10} {:10}'
+                  .format(mtype, key, el['is_visible'], str(res)))
 
         if el['is_visible'] != res:
             try:

@@ -1,19 +1,13 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+from qtpy import QtCore
+from qtpy import QtWidgets
 
-from ..qtbase import QtCore
-from ..qtbase import QtWidgets
+from SiQt.tests import get_system_info
 
-from ..tests import get_system_info
 
 class DebugInfoWidget(QtWidgets.QTreeWidget):
 
-    def __init__(self, main_window, parent = None):
+    def __init__(self, main_window, parent=None):
         super(DebugInfoWidget, self).__init__(parent)
         self.setWindowTitle('Debug information')
         self.setGeometry(QtCore.QRect(100, 100, 500, 800))
@@ -21,7 +15,7 @@ class DebugInfoWidget(QtWidgets.QTreeWidget):
         dinfo = get_system_info(pretty_print=False)
 
         header = QtWidgets.QTreeWidgetItem(["Parameter", "Value"])
-        self.setHeaderItem(header) 
+        self.setHeaderItem(header)
 
         for sec_key, sec_value in dinfo.items():
             header = QtWidgets.QTreeWidgetItem(self, [sec_key])
@@ -34,7 +28,6 @@ class DebugInfoWidget(QtWidgets.QTreeWidget):
 
             self.base = main_window
             self.header().resizeSection(0, 230)
-
 
     def closeEvent(self, event):
         self.base.widgets['info'] = None
