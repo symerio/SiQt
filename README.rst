@@ -28,5 +28,5 @@ The test suite can be run with,
     py.test -sv .
 
 .. |Build Status| image:: https://travis-ci.org/symerio/SiQt.svg?branch=master
-   :target: https://travis-ci.org/rth/SiQt
+   :target: https://travis-ci.org/symerio/SiQt
 
