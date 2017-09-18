@@ -10,7 +10,7 @@ class DebugInfoWidget(QtWidgets.QTreeWidget):
     def __init__(self, main_window, parent=None):
         super(DebugInfoWidget, self).__init__(parent)
         self.setWindowTitle('Debug information')
-        self.setGeometry(QtCore.QRect(100, 100, 500, 800))
+        self.setGeometry(QtCore.QRect(100, 100, 500, 600))
 
         dinfo = get_system_info(pretty_print=False)
 

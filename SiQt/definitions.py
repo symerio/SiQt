@@ -19,91 +19,90 @@ except ImportError:
 #
 
 
-def add_actions(self, target, actions):
-    for action in actions:
-        if action is None:
-            target.addSeparator()
-        else:
-            target.addAction(action)
+class SiQtMixin(object):
 
-
-def create_action(self, text, slot=None, shortcut=None,
-                  icon=None, tip=None, checkable=False,
-                  signal="triggered"):
-    action = QtWidgets.QAction(text, self)
-    if icon is not None:
-        action.setIcon(QtWidgets.QIcon(":/%s.png" % icon))
-    if shortcut is not None:
-        action.setShortcut(shortcut)
-    if tip is not None:
-        action.setToolTip(tip)
-        action.setStatusTip(tip)
-    if slot is not None:
-        getattr(action, signal).connect(slot)
-    if checkable:
-        action.setCheckable(True)
-    return action
-
-
-def menu_generator(self, name, label, elements):
-    # File menu
-    self.menu[name] = self.menuBar().addMenu("&"+label)
-    self.menu[name].elmts = elements
-
-    def show_menu(action):
-        def f(value):
-            if value:
-                action.setDisabled(False)
-                action.setEnabled(True)
+    def add_actions(self, target, actions):
+        for action in actions:
+            if action is None:
+                target.addSeparator()
             else:
+                target.addAction(action)
+
+    def create_action(self, text, slot=None, shortcut=None,
+                      icon=None, tip=None, checkable=False,
+                      signal="triggered"):
+        action = QtWidgets.QAction(text, self)
+        if icon is not None:
+            action.setIcon(QtWidgets.QIcon(":/%s.png" % icon))
+        if shortcut is not None:
+            action.setShortcut(shortcut)
+        if tip is not None:
+            action.setToolTip(tip)
+            action.setStatusTip(tip)
+        if slot is not None:
+            getattr(action, signal).connect(slot)
+        if checkable:
+            action.setCheckable(True)
+        return action
+
+    def menu_generator(self, name, label, elements):
+        # File menu
+        self.menu[name] = self.menuBar().addMenu("&"+label)
+        self.menu[name].elmts = elements
+
+        def show_menu(action):
+            def f(value):
+                if value:
+                    action.setDisabled(False)
+                    action.setEnabled(True)
+                else:
+                    action.setDisabled(True)
+                    action.setEnabled(False)
+
+            return f
+
+        idx = 1
+        for key, menu_el in elements.items():
+            if menu_el is None:
+                self.menu[name].addSeparator()
+                continue
+
+            pars = self.menu[name].elmts[key]
+
+            if name == 'view':
+                pars['slot'] = self.on_view_handler(key)
+                if idx < 10:
+                    pars['shortcut'] = 'Ctrl+{}'.format(idx)
+
+            if 'slot' not in pars:
+                pars['slot'] = getattr(self, 'on_'+key)
+
+            tpars = pars.copy()
+            for tkey in ['depends', 'enabled']:
+                if tkey in tpars:
+                    del tpars[tkey]
+            action = self.create_action(**tpars)
+            # has some dependecies meaning can't be used initially
+            if pars['depends']:
                 action.setDisabled(True)
-                action.setEnabled(False)
 
-        return f
+            if 'enabled' in pars and not pars['enabled']:
+                action.setDisabled(True)
+            self.menu[name].addAction(action)
 
-    idx = 1
-    for key, menu_el in elements.items():
-        if menu_el is None:
-            self.menu[name].addSeparator()
-            continue
+            pars['qtobject'] = action
+            pars['show'] = show_menu(action)
+            idx += 1
 
-        pars = self.menu[name].elmts[key]
-
-        if name == 'view':
-            pars['slot'] = self.on_view_handler(key)
-            if idx < 10:
-                pars['shortcut'] = 'Ctrl+{}'.format(idx)
-
-        if 'slot' not in pars:
-            pars['slot'] = getattr(self, 'on_'+key)
-
-        tpars = pars.copy()
-        for tkey in ['depends', 'enabled']:
-            if tkey in tpars:
-                del tpars[tkey]
-        action = self.create_action(**tpars)
-        # has some dependecies meaning can't be used initially
-        if pars['depends']:
-            action.setDisabled(True)
-
-        if 'enabled' in pars and not pars['enabled']:
-            action.setDisabled(True)
-        self.menu[name].addAction(action)
-
-        pars['qtobject'] = action
-        pars['show'] = show_menu(action)
-        idx += 1
-
-
-def set_dep_flag_recursive(self, key, value, sync=False):
-    """ Change status for a dependent field,
-    and pull all the fields that are dependent on it.
-    """
-    self.dep_flags[key] = value
-    for dkey in dependency_graph(key, self.dep_graph):
-        self.dep_flags[dkey] = False
-    if sync:
-        calculate_dependencies(self)
+    def set_dep_flag_recursive(self, key, value, sync=False):
+        """ Change status for a dependent field,
+        and pull all the fields that are dependent on it.
+        """
+        self.dep_flags[key] = value
+        for dkey in dependency_graph(key, self.dep_graph):
+            self.dep_flags[dkey] = False
+        if sync:
+            calculate_dependencies(self)
 
 
 class SiqtElement(dict):

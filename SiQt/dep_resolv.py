@@ -23,16 +23,18 @@ def sync_gui(lock=[], update=[], view_mode=None, background=False):
                         p[key]['show'](False)
                         p[key]['is_visible'] = False
 
-            for key in update:
-                self.set_dep_flag_recursive(key, True)
-
             QtWidgets.QApplication.processEvents()
 
-            f(self, *args, **kwargs)
+            try:
+                f(self, *args, **kwargs)
+                for key in update:
+                    self.set_dep_flag_recursive(key, True)
+                if view_mode is not None:
+                    self.view_mode = view_mode
+                    self.on_draw()
+            except:
+                raise
 
-            if view_mode is not None:
-                self.view_mode = view_mode
-                self.on_draw()
             if not background:
                 calculate_dependencies(self, verbose=False)
         return f_wrapper

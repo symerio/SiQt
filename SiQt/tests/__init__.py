@@ -25,38 +25,24 @@ def get_system_info(pretty_print=False):
         python[key] = getattr(platform, key)()
 
     sv = {}
-    try:
-        import numpy as np
-        sv['numpy'] = np.__version__
-    except ImportError:
-        sv['numpy'] = 'Not installed'
-
-    try:
-        import scipy
-        sv['scipy'] = scipy.__version__
-    except ImportError:
-        sv['scipy'] = "Not installed"
-
-    try:
-        import pandas as pd
-        sv['pandas'] = pd.__version__
-    except ImportError:
-        sv['pandas'] = "Not installed"
-    try:
-        import matplotlib as mpl
-        sv['matplotlib'] = mpl.__version__
-    except ImportError:
-        sv['matplotlib'] = "Not installed"
-
-    for key in ['PYQT4', 'PYQT4_API', 'PYQT5', 'PYQT5_API',
-                'PYQT_VERSION', 'PYSIDE', 'PYSIDE2', 'PYSIDE2_API',
-                'PYSIDE_API', 'PYSIDE_VERSION', 'QT_API', 'QT_VERSION']:
+    for package_name in ['numpy', 'scipy', 'pandas',
+                         'matplotlib', 'qtpy', 'SiQt']:
         try:
-            val = getattr(qtpy, key)
-            if val:
-                sv[key] = val
-        except:
-            pass
+            package = __import__(package_name)
+            sv[package_name] = package.__version__
+        except ImportError:
+            sv[package_name] = 'Not installed'
+    try:
+        sv['QT_API'] = qtpy.API
+    except:
+        sv['QT_API'] = 'Undetermined'
+
+    try:
+        if qtpy.API.startswith('pyside'):
+            qtpy_backend = __import__(qtpy.API_NAME)
+            sv[qtpy.API_NAME] = qtpy_backend.__version__
+    except:
+        raise
 
     if not pretty_print:
         return {'system': system, 'python': python, 'software_versions': sv}
