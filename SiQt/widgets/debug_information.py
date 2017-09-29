@@ -8,7 +8,7 @@ from SiQt.tests import get_system_info
 class DebugInfoWidget(QtWidgets.QTreeWidget):
 
     def __init__(self, main_window, parent=None):
-        super(DebugInfoWidget, self).__init__(parent)
+        super().__init__(parent)
         self.setWindowTitle('Debug information')
         self.setGeometry(QtCore.QRect(100, 100, 500, 600))
 
@@ -31,4 +31,4 @@ class DebugInfoWidget(QtWidgets.QTreeWidget):
 
     def closeEvent(self, event):
         self.base.widgets['info'] = None
-        super(DebugInfoWidget, self).closeEvent(event)
+        super().closeEvent(event)

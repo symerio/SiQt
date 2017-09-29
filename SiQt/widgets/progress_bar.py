@@ -9,7 +9,7 @@ from ..dep_resolv import calculate_dependencies
 class ProgressBarWidget(QtWidgets.QWidget):
 
     def __init__(self, main_window, parent=None):
-        super(ProgressBarWidget, self).__init__(parent)
+        super().__init__(parent)
         layout = QtGui.QVBoxLayout(self)
         self.setGeometry(QtCore.QRect(100, 100, 400, 200))
 

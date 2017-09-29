@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from collections import OrderedDict
+from functools import partial
 
 from qtpy import QtCore
 from qtpy import QtGui
@@ -84,10 +85,12 @@ class SiQtMixin(object):
             action = self.create_action(**tpars)
             # has some dependecies meaning can't be used initially
             if pars['depends']:
+
                 action.setDisabled(True)
 
             if 'enabled' in pars and not pars['enabled']:
                 action.setDisabled(True)
+
             self.menu[name].addAction(action)
 
             pars['qtobject'] = action
@@ -105,15 +108,15 @@ class SiQtMixin(object):
             calculate_dependencies(self)
 
 
-class SiqtElement(dict):
+class SiqtItem(dict):
 
-    def __init__(self, qtobj, layout=None, position=None,
-                 depends=[], dtype=str, **args):
+    def __init__(self, qtobj, position=None,
+                 depends=[], dtype=str, layout=None, **args):
         """
         A helper class to work with the underlying QtObject
         """
         if isinstance(qtobj, str):
-            # if given a string, this is probably a label
+            # when given a string, convert to a label
             qtobj = QtWidgets.QLabel(qtobj)
         self.dtype = dtype
         if isinstance(qtobj, QtWidgets.QLineEdit) and dtype != str:
@@ -130,9 +133,14 @@ class SiqtElement(dict):
             for key, val in args['choices'].items():
                 qtobj.addItem(QString(key), val)
 
-        super(SiqtElement, self).__init__(qtobj=qtobj, depends=depends, **args)
+        super().__init__(qtobj=qtobj, depends=depends, **args)
         if layout is not None and position is not None:
             layout.addWidget(qtobj, *position)
+
+    @classmethod
+    def with_layout(cls, layout):
+        """ Pre-initialize SiqtItem with layout """
+        return partial(cls, layout=layout)
 
     def set_text(self, value):
         value = QString(str(value))
