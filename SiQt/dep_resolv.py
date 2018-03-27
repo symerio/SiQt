@@ -9,6 +9,7 @@ def show_qt_control_element(el):
 
 
 def sync_gui(lock=[], update=[], view_mode=None, background=False):
+    """Process GUI events and determine which elements should be enabled"""
     def decorator_generator(f):
         def f_wrapper(self, *args, **kwargs):
             # lock some elements if need be
@@ -77,10 +78,7 @@ def check_depflags(dep_flags, expr):
 
 
 def calculate_dependencies(self, verbose=False, initialize=False):
-    """
-        This function allows to determine which graphical should be active
-        depending on the current processing step
-    """
+    """Determine which GUI elements should be enabled"""
     dep_list = []
 
     for menu_el in self.menu.values():

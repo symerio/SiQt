@@ -49,7 +49,7 @@ extensions = [
 
 autosummary_generate = True
 
-autodoc_default_flags = ['members', 'inherited-members']
+autodoc_default_flags = ['members']
 
 
 intersphinx_mapping = {'python': ('https://docs.python.org/3.6', None),}

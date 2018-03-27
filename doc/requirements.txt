@@ -1,3 +1,6 @@
+PyQt5
+qtpy
+matplotlib
 sphinx
 recommonmark
 sphinx_rtd_theme

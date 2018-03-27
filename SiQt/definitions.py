@@ -19,6 +19,11 @@ except ImportError:
 
 
 class SiQtMixin(object):
+    """A mixin to extend ``QtWidgets.QMainWindow``
+
+    This class adds a few convinient functions to
+    ``QtWidgets.QMainWindow`` to add actions and generate menus
+    """
 
     def add_actions(self, target, actions):
         for action in actions:
@@ -45,6 +50,7 @@ class SiQtMixin(object):
         return action
 
     def menu_generator(self, name, label, elements):
+        """Generate menu"""
         # File menu
         self.menu[name] = self.menuBar().addMenu("&"+label)
         self.menu[name].elmts = elements
@@ -107,12 +113,14 @@ class SiQtMixin(object):
 
 
 class SiqtItem(dict):
+    """A thin wrapper around any QtObject
+
+    Supports dependencies, a straightforward way of getting / setting
+    value.
+    """
 
     def __init__(self, qtobj, position=None,
                  depends=[], dtype=str, layout=None, **args):
-        """
-        A helper class to work with the underlying QtObject
-        """
         if isinstance(qtobj, str):
             # when given a string, convert to a label
             qtobj = QtWidgets.QLabel(qtobj)
@@ -184,6 +192,7 @@ class SiqtItem(dict):
 
     @property
     def value(self):
+        """Get the value of the QtObject"""
         qtobj = self['qtobj']
         if isinstance(qtobj, QtWidgets.QCheckBox):
             return qtobj.isChecked()
@@ -201,7 +210,7 @@ class SiqtItem(dict):
             return self.dtype(val)
 
     def __getattr__(self, name):
-        """ Only called if name not in the registered methods
-        In this case call the qtobject methods """
+        """Fallback to the original qtobject methods
+        if the method was not explicitly defined"""
 
         return getattr(self['qtobj'],  name)
