@@ -5,7 +5,7 @@ matrix:
     - python: "3.5"
 
 install: 
-    - pip install pyqt qtpy pytest
+    - pip install PyQt5 qtpy pytest
     - pip install .
 
 script: 

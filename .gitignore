@@ -12,3 +12,5 @@ dist/
 bin/
 .cache/
 .pytest_cache/
+_build/
+generated/
