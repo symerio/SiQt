@@ -3,7 +3,7 @@ SiQt
 
 |Build Status|
 
-Convenience tools for building PyQt/PySide based GUI applications.
+Convenience tools for building PyQt5 / PySide2 based GUI applications.
 
 
 Installation
@@ -15,7 +15,7 @@ It can be installed with,
 
 ::
 
-    pip install git+https://github.com/symerio/SiQt.git
+    pip install SiQt
 
 
 Unit tests
