@@ -3,18 +3,11 @@ sudo: false
 matrix:
     include:
     - python: "3.5"
-      env: SIQT_BACKEND="PyQt5"
 
 install: 
-    - wget http://repo.continuum.io/miniconda/Miniconda${TRAVIS_PYTHON_VERSION:0:1}-latest-Linux-x86_64.sh -O miniconda.sh
-    - chmod +x miniconda.sh
-    - ./miniconda.sh -b
-    - export PATH=/home/travis/miniconda${TRAVIS_PYTHON_VERSION:0:1}/bin:$PATH
-    - conda update --yes conda
-    - conda config --set always_yes yes --set changeps1 no
-    - conda create -n siqt-env -c conda-forge -y pyqt qtpy pytest python=3.5
-    - source activate siqt-env && pip install .
+    - pip install pyqt qtpy pytest
+    - pip install .
 
 script: 
-    - source activate siqt-env && py.test -sv .
+    - py.test .
 

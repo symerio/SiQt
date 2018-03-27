@@ -56,7 +56,7 @@ def generic_eval(tokens, op_dict):
     elif len(tokens) == 3:
         try:
             return op_dict[tokens[1]](tokens[0], tokens[2])  # binary_eval
-        except:
+        except: # noqa
             print(tokens)
             raise
     elif len(tokens) > 3:

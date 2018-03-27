@@ -34,14 +34,14 @@ def get_system_info(pretty_print=False):
             sv[package_name] = 'Not installed'
     try:
         sv['QT_API'] = qtpy.API
-    except:
+    except:  # noqa
         sv['QT_API'] = 'Undetermined'
 
     try:
         if qtpy.API.startswith('pyside'):
             qtpy_backend = __import__(qtpy.API_NAME)
             sv[qtpy.API_NAME] = qtpy_backend.__version__
-    except:
+    except:  # noqa
         raise
 
     if not pretty_print:

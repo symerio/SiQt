@@ -11,3 +11,4 @@ build/
 dist/
 bin/
 .cache/
+.pytest_cache/

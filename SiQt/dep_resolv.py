@@ -32,7 +32,7 @@ def sync_gui(lock=[], update=[], view_mode=None, background=False):
                 if view_mode is not None:
                     self.view_mode = view_mode
                     self.on_draw()
-            except:
+            except:  # noqa
                 raise
 
             if not background:
@@ -122,7 +122,7 @@ def calculate_dependencies(self, verbose=False, initialize=False):
         if el['is_visible'] != res:
             try:
                 el['show'](res)
-            except:
+            except:  # noqa
                 print(el)
                 raise
             el['is_visible'] = res

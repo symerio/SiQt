@@ -17,7 +17,7 @@ setup(name='SiQt',
       url='https://github.com/symerio/SiQt',
       license='MIT',
       packages=find_packages(),
-      install_requires=['six'],
+      install_requires=['qtpy'],
       long_description=long_description,
       classifiers=[
           'Development Status :: 4 - Beta',
