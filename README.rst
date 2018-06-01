@@ -3,6 +3,9 @@ SiQt
 
 |Documentation| |Build Status|
 
+
+NOTE: this package is deprecated, do not use it.
+
 Convenience tools for building PyQt5 / PySide2 based GUI applications.
 
 
